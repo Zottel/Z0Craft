@@ -1,0 +1,16 @@
+[
+{
+  "modid": "z0craft",
+  "name": "z0craft",
+  "description": "le mod",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["z0ttel"],
+  "credits": "The Forge and FML guys, for making this work so well",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
