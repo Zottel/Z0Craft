@@ -8,7 +8,7 @@ import com.z0ttel.z0craft.Z0Craft;
 
 import com.z0ttel.z0craft.dimension.Z0Dimension;
 
-public class Z0DimensionClient extends Z0Dimension {
+public class ClientZ0Dimension extends Z0Dimension {
 	public void preInit(FMLPreInitializationEvent event) {
 		super.preInit(event);
 	}

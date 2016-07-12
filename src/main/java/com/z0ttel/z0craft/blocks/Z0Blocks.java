@@ -1,4 +1,4 @@
-package com.z0ttel.z0craft;
+package com.z0ttel.z0craft.blocks;
 
 import org.apache.logging.log4j.Logger;
 
@@ -21,9 +21,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-import com.z0ttel.z0craft.blocks.BlockZ0Portal;
+import com.z0ttel.z0craft.Z0Craft;
 
-public class CommonProxy {
+public class Z0Blocks {
+	
 	public Block blocks[] = new Block[]{
 		new Block(Material.ROCK)
 		         .setHardness(3.0F)
@@ -38,6 +39,7 @@ public class CommonProxy {
 		         .setUnlocalizedName("leportal")
 		         .setRegistryName("leportal")
 	};
+	
 	public Item blockitems[];
 	
 	public void preInit(FMLPreInitializationEvent event)
@@ -58,6 +60,7 @@ public class CommonProxy {
 		int i = 0;
 		for (Block block: blocks) {
 			blockitems[i] = new ItemBlock(block).setRegistryName(block.getRegistryName());
+			blockitems[i].setCreativeTab(Z0Craft.creativeTab);
 			i++;
 		}
 		

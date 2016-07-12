@@ -17,7 +17,7 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
 
 import com.z0ttel.z0craft.Z0Craft;
-import com.z0ttel.z0craft.CommonProxy;
+import com.z0ttel.z0craft.blocks.Z0Blocks;
 
 
 public class Z0ChunkProvider implements IChunkGenerator {
@@ -33,7 +33,7 @@ public class Z0ChunkProvider implements IChunkGenerator {
 	public Chunk provideChunk(int x, int z) {
 		ChunkPrimer chunkprimer = new ChunkPrimer();
 		
-		Block block = Z0Craft.proxy.blocks[0];
+		Block block = Z0Craft.blocks.blocks[0];
 		
 		for (int j = 0; j < 16; ++j)
 		{
