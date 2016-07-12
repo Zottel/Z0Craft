@@ -20,6 +20,9 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import com.z0ttel.z0craft.dimension.Z0Dimension;
+import com.z0ttel.z0craft.dimension.Z0DimensionClient;
+
 @Mod(modid = Z0Craft.MODID, version = Z0Craft.VERSION)
 public class Z0Craft
 {
@@ -33,13 +36,16 @@ public class Z0Craft
 	            serverSide="com.z0ttel.z0craft.ServerSideProxy")
 	public static CommonProxy proxy;
 	
+	@SidedProxy(clientSide="com.z0ttel.z0craft.dimension.Z0DimensionClient",
+	            serverSide="com.z0ttel.z0craft.dimension.Z0Dimension")
+	public static Z0Dimension dimension;
+	
 	public static Logger logger;
 	
 	public static Config config;
 	
 	@EventHandler
-	public void preInit(FMLPreInitializationEvent event)
-	{
+	public void preInit(FMLPreInitializationEvent event) {
 		logger = event.getModLog();
 		Z0Craft.logger.trace("trace logging activated");
 		Z0Craft.logger.info("preInit called");
@@ -48,19 +54,23 @@ public class Z0Craft
 		config = new Config(event.getSuggestedConfigurationFile());
 		
 		proxy.preInit(event);
+		
+		dimension.preInit(event);
 	}
 	
 	@EventHandler
-	public void init(FMLInitializationEvent event)
-	{
+	public void init(FMLInitializationEvent event) {
 		Z0Craft.logger.info("CommonProxy/init called");
 		proxy.init(event);
+		
+		dimension.init(event);
 	}
 	
 	@EventHandler
-	public void postInit(FMLPostInitializationEvent event)
-	{
+	public void postInit(FMLPostInitializationEvent event) {
 		Z0Craft.logger.info("CommonProxy/postInit called");
 		proxy.postInit(event);
+		
+		dimension.postInit(event);
 	}
 }

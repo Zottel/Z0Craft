@@ -32,12 +32,17 @@ public class ClientSideProxy extends CommonProxy {
 		super.preInit(event);
 		Z0Craft.logger.info("ClientSideProxy/preInit continuing");
 		
+		
 		for (Item item: blockitems) {
-			ModelResourceLocation mrl = new ModelResourceLocation(item.getRegistryName(), "inventory");
+			ModelResourceLocation mrl = new ModelResourceLocation(item.getRegistryName().toString(), "inventory");
+			
 			Z0Craft.logger.info("ClientSideProxy/preInit setting MRL for '" + item.getRegistryName() + "' to '" + mrl + "'");
+			
 			ModelLoader.setCustomModelResourceLocation(item, 0, mrl);
 		}
 		
+		
+		/*
 		// Debug stuffs, have a look at finding items
 		IForgeRegistry<Item> itemRegistry = GameRegistry.findRegistry(Item.class);
 		if(itemRegistry == null) {
@@ -47,6 +52,7 @@ public class ClientSideProxy extends CommonProxy {
 		for(Item item: itemRegistry.getValues()) {
 			Z0Craft.logger.warn("ClientSideProxy/preInit Item: " + item + " with registry name '" + item.getRegistryName() + "'");
 		}
+		*/
 	}
 	
 	public void init(FMLInitializationEvent event)

@@ -4,9 +4,10 @@ import java.io.File;
 
 import net.minecraftforge.common.config.Configuration;
 
-class Config{
+public class Config{
 	Configuration configFile;
 	
+	public int dimensionID = 97;
 	public int myConfigInteger = 32;
 	public String myConfigString = "Hello!";
 	public boolean myConfigBool = false;

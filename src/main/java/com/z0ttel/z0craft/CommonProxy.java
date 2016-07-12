@@ -21,21 +21,24 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import com.z0ttel.z0craft.blocks.BlockZ0Portal;
 
 public class CommonProxy {
 	protected Block blocks[] = new Block[]{
 		new Block(Material.ROCK)
 		         .setHardness(3.0F)
-		         .setUnlocalizedName("lerock")
-		         .setRegistryName("lerock"),
+		         .setRegistryName("lerock")
+		         .setUnlocalizedName("lerock"),
 		new Block(Material.ROCK)
 		         .setHardness(3.0F)
-		         .setUnlocalizedName("lerock2")
-		         .setRegistryName("lerock2")
+		         .setUnlocalizedName("lelight")
+		         .setRegistryName("lelight")
+		         .setLightLevel(1.0F),
+		new BlockZ0Portal()
+		         .setUnlocalizedName("leportal")
+		         .setRegistryName("leportal")
 	};
-	protected Item blockitems[] = new Item[]{
-		new ItemBlock(blocks[0])
-	};
+	protected Item blockitems[];
 	
 	public void preInit(FMLPreInitializationEvent event)
 	{
