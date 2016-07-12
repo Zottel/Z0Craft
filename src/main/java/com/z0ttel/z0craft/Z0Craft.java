@@ -41,7 +41,6 @@ public class Z0Craft
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		logger = event.getModLog();
-		Z0Craft.logger.setLevel(Level.TRACE);
 		Z0Craft.logger.trace("trace logging activated");
 		Z0Craft.logger.info("preInit called");
 		Z0Craft.logger.info("source file: " + event.getSourceFile());
