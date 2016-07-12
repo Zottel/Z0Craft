@@ -24,7 +24,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import com.z0ttel.z0craft.blocks.BlockZ0Portal;
 
 public class CommonProxy {
-	protected Block blocks[] = new Block[]{
+	public Block blocks[] = new Block[]{
 		new Block(Material.ROCK)
 		         .setHardness(3.0F)
 		         .setRegistryName("lerock")
@@ -38,7 +38,7 @@ public class CommonProxy {
 		         .setUnlocalizedName("leportal")
 		         .setRegistryName("leportal")
 	};
-	protected Item blockitems[];
+	public Item blockitems[];
 	
 	public void preInit(FMLPreInitializationEvent event)
 	{
