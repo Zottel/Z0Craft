@@ -27,17 +27,26 @@ public class Z0Blocks {
 	
 	public Block blocks[] = new Block[]{
 		new Block(Material.ROCK)
+		         .setBlockUnbreakable()
+		         .setRegistryName("unbreakable")
+		         .setUnlocalizedName("unbreakable"),
+		
+		new Block(Material.ROCK)
 		         .setHardness(3.0F)
 		         .setRegistryName("lerock")
 		         .setUnlocalizedName("lerock"),
-		new Block(Material.ROCK)
+		
+		new Block(Material.GLASS)
 		         .setHardness(3.0F)
 		         .setUnlocalizedName("lelight")
 		         .setRegistryName("lelight")
 		         .setLightLevel(1.0F),
+		
 		new BlockZ0Portal()
 		         .setUnlocalizedName("leportal")
 		         .setRegistryName("leportal")
+		         .setBlockUnbreakable()
+		         .setLightLevel(0.45F)
 	};
 	
 	public Item blockitems[];

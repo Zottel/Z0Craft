@@ -6,6 +6,10 @@ import org.apache.logging.log4j.Level;
 import net.minecraft.init.Blocks;
 import net.minecraft.client.resources.I18n;
 
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.gen.structure.template.TemplateManager;
+import net.minecraft.world.gen.structure.template.Template;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import java.io.File;
@@ -51,33 +55,45 @@ public class Z0Craft
 	
 	public static Config config;
 	
+	public static Template stuhl;
+	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		logger = event.getModLog();
-		Z0Craft.logger.trace("trace logging activated");
 		Z0Craft.logger.info("Z0Craft/preInit called");
 		Z0Craft.logger.info("source file: " + event.getSourceFile());
 		
 		config = new Config(event.getSuggestedConfigurationFile());
 		
 		this.creativeTab = new Z0CreativeTab("z0craft");
+		
 		blocks.preInit(event);
 		dimension.preInit(event);
+		Z0Craft.logger.info("Z0Craft/preInit done");
 	}
 	
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		Z0Craft.logger.info("Z0Craft/init called");
 		
+		TemplateManager templateMan = new TemplateManager("/");
+		// TODO: replace this with deobfuscated when ready
+		stuhl = templateMan.func_189942_b(null, new ResourceLocation("z0craft:stuhl"));
+		Z0Craft.logger.info("test1 template: " + stuhl);
+		
 		blocks.init(event);
 		dimension.init(event);
+		
+		Z0Craft.logger.info("Z0Craft/init done");
 	}
 	
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		Z0Craft.logger.info("Z0Craft/postInit called");
-		blocks.postInit(event);
 		
+		blocks.postInit(event);
 		dimension.postInit(event);
+		
+		Z0Craft.logger.info("Z0Craft/postInit done");
 	}
 }

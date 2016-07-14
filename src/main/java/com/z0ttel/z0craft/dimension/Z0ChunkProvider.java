@@ -13,6 +13,9 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkGenerator;
 
+import net.minecraft.world.gen.structure.template.Template;
+import net.minecraft.world.gen.structure.template.PlacementSettings;
+
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
 
@@ -21,30 +24,37 @@ import com.z0ttel.z0craft.blocks.Z0Blocks;
 
 
 public class Z0ChunkProvider implements IChunkGenerator {
-	private World worldIn;
+	private World world;
 	private long seed;
 	
 	public Z0ChunkProvider(World worldIn, long seed) {
-		this.worldIn = worldIn;
+		Z0Craft.logger.info("Z0ChunkProvider/Z0ChunkProvider called");
+		this.world = worldIn;
 		this.seed = seed;
 	}
 	
-	
-	public Chunk provideChunk(int x, int z) {
-		ChunkPrimer chunkprimer = new ChunkPrimer();
-		
-		Block block = Z0Craft.blocks.blocks[0];
+	private void primeLayer(ChunkPrimer primer, int layer, Block block) {
 		
 		for (int j = 0; j < 16; ++j)
 		{
 			for (int k = 0; k < 16; ++k)
 			{
-				chunkprimer.setBlockState(j, 0, k, block.getDefaultState());
+				primer.setBlockState(j, layer, k, block.getDefaultState());
 			}
 		}
+	}
+	
+	public Chunk provideChunk(int x, int z) {
+		Z0Craft.logger.info("Z0ChunkProvider/provideChunk called for " + x + "/" + z);
+		ChunkPrimer chunkprimer = new ChunkPrimer();
 		
-		Chunk chunk = new Chunk(this.worldIn, chunkprimer, x, z);
-		Biome[] abiome = this.worldIn.getBiomeProvider().getBiomes((Biome[])null, x * 16, z * 16, 16, 16);
+		Block block = Z0Craft.blocks.blocks[2];
+		
+		this.primeLayer(chunkprimer, 0, block);
+		this.primeLayer(chunkprimer, 255, block);
+		
+		Chunk chunk = new Chunk(this.world, chunkprimer, x, z);
+		Biome[] abiome = this.world.getBiomeProvider().getBiomes((Biome[])null, x * 16, z * 16, 16, 16);
 		byte[] abyte = chunk.getBiomeArray();
 		
 		for (int l = 0; l < abyte.length; ++l)
@@ -57,15 +67,23 @@ public class Z0ChunkProvider implements IChunkGenerator {
 	}
 	
 	public void populate(int x, int z) {
+		Z0Craft.logger.info("Z0ChunkProvider/populate called for " + x + "/" + z);
 		// TODO: add structures here?
+		
+		PlacementSettings pls = new PlacementSettings();
+		
+		Z0Craft.stuhl.addBlocksToWorld(this.world, new BlockPos(x * 16 + 4, 0, z * 16 + 4), pls);
 	}
 	
 	public boolean generateStructures(Chunk chunkIn, int x, int z) {
+		Z0Craft.logger.info("Z0ChunkProvider/generateStructures called for " + x + "/" + z);
 		return false;
 	}
 	
+	private static List<Biome.SpawnListEntry> NOCREATURES = new ArrayList<Biome.SpawnListEntry>(0);
 	public List<Biome.SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos) {
-		return new ArrayList<Biome.SpawnListEntry>(0);
+		//Z0Craft.logger.info("Z0ChunkProvider/getPossibleCreatures called for " + creatureType + " at " + pos);
+		return NOCREATURES;
 	}
 	
 	@Nullable

@@ -15,9 +15,11 @@ import com.z0ttel.z0craft.Z0Craft;
 public class Z0Dimension {
 	
 	public void preInit(FMLPreInitializationEvent event) {
+		Z0Craft.logger.info("Z0Dimension/preInit called");
 	}
 	
 	public void init(FMLInitializationEvent event) {
+		Z0Craft.logger.info("Z0Dimension/init called");
 		
 		DimensionType dimT = DimensionType.register("Z0Dimension", "_z0dim", Z0Craft.config.dimensionID, Z0WorldProvider.class, false);
 		DimensionManager.registerDimension(Z0Craft.config.dimensionID, dimT);
@@ -27,6 +29,7 @@ public class Z0Dimension {
 	}
 	
 	public void postInit(FMLPostInitializationEvent event) {
+		Z0Craft.logger.info("Z0Dimension/postInit called");
 	}
 }
 

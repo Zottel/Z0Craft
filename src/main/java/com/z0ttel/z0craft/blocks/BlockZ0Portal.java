@@ -6,6 +6,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBreakable;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.material.MapColor;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -45,9 +47,9 @@ public class BlockZ0Portal extends BlockBreakable {
 	
 	
 	public BlockZ0Portal() {
-		super(Material.PORTAL, false);
-		setBlockUnbreakable();
-		setLightLevel(0.1F);
+		// "false" is ignoreSimilarity, which sets the side rendering
+		// to the right mode for transparent blocks
+		super(Material.PORTAL, false, MapColor.EMERALD);
 	}
 
 	
