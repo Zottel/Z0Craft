@@ -61,8 +61,20 @@ dependencies {
 	// http://www.gradle.org/docs/current/userguide/dependency_management.html
 }
 
+// Change to Sync type to have gradle remove files that are not present in from
+task processStructures(type: Copy) {
+	description 'Fetches structure files from a configured source. Used for importing ingame structure saves.'
+	
+	from "run/saves/${structure_savegame}/structures"
+	into "src/main/resources/assets/z0craft/structures/"
+}
+
 processResources
 {
+	if (project.properties.containsKey("structure_savegame")) {
+		dependsOn "processStructures"
+	}
+	
 	// this will ensure that this task is redone when the versions change.
 	inputs.property "version", project.version
 	inputs.property "mcversion", project.minecraft.version
