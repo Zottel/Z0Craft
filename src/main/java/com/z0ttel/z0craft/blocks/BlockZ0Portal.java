@@ -58,6 +58,10 @@ public class BlockZ0Portal extends BlockBreakable {
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
 	{
 		Z0Craft.logger.info("BlockZ0Portal/onEntityCollidedWithBlock called for entity: " + entityIn);
+		if(entityIn.timeUntilPortal > 0) {
+			return;
+		}
+		
 		//entity.dimension
 		int destinationDim = Z0Craft.config.dimensionID;
 		if(entityIn.dimension == destinationDim) {
@@ -65,8 +69,9 @@ public class BlockZ0Portal extends BlockBreakable {
 		}
 		
 		if(entityIn instanceof EntityPlayerMP) {
-			
 			EntityPlayerMP player = (EntityPlayerMP)entityIn;
+			player.timeUntilPortal = 5; // 5 Ticks, 1/4th of a second
+			
 			MinecraftServer mcServer = player.mcServer;
 			
 			Teleporter teleporter = new Z0Teleporter(mcServer.worldServerForDimension(destinationDim));

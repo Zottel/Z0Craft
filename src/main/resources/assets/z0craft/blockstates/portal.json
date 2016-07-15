@@ -1,7 +1,7 @@
 {
 	"variants": {
 		"normal": [{
-			"model": "z0craft:leportal"
+			"model": "z0craft:portal"
 		}]
 	}
 }

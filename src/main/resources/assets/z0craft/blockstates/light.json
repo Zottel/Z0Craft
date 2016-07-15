@@ -1,7 +1,7 @@
 {
 	"variants": {
 		"normal": [{
-			"model": "z0craft:lelight"
+			"model": "z0craft:light"
 		}]
 	}
 }

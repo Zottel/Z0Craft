@@ -7,6 +7,8 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 
+import net.minecraft.init.Blocks;
+
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
@@ -18,6 +20,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.Rotation;
 
 import com.z0ttel.z0craft.Z0Craft;
 import com.z0ttel.z0craft.blocks.Z0Blocks;
@@ -48,10 +51,11 @@ public class Z0ChunkProvider implements IChunkGenerator {
 		Z0Craft.logger.info("Z0ChunkProvider/provideChunk called for " + x + "/" + z);
 		ChunkPrimer chunkprimer = new ChunkPrimer();
 		
-		Block block = Z0Craft.blocks.blocks[2];
+		Block block = Z0Craft.blocks.LIGHT;
 		
-		this.primeLayer(chunkprimer, 0, block);
-		this.primeLayer(chunkprimer, 255, block);
+		this.primeLayer(chunkprimer, 0, Blocks.BEDROCK);
+		this.primeLayer(chunkprimer, 1, block);
+		this.primeLayer(chunkprimer, 255, Blocks.BEDROCK);
 		
 		Chunk chunk = new Chunk(this.world, chunkprimer, x, z);
 		Biome[] abiome = this.world.getBiomeProvider().getBiomes((Biome[])null, x * 16, z * 16, 16, 16);
@@ -71,8 +75,25 @@ public class Z0ChunkProvider implements IChunkGenerator {
 		// TODO: add structures here?
 		
 		PlacementSettings pls = new PlacementSettings();
+		pls.setIgnoreEntities(false);
+		switch(Math.abs(x) % 4) {
+			case 0:
+				pls.setRotation(Rotation.NONE);
+				break;
+			case 1:
+				pls.setRotation(Rotation.CLOCKWISE_90);
+				break;
+			case 2:
+				pls.setRotation(Rotation.CLOCKWISE_180);
+				break;
+			case 3:
+				pls.setRotation(Rotation.COUNTERCLOCKWISE_90);
+				break;
+		}
 		
-		Z0Craft.stuhl.addBlocksToWorld(this.world, new BlockPos(x * 16 + 4, 0, z * 16 + 4), pls);
+		Z0Craft.logger.info("Z0ChunkProvider/placing stuhl with rotation " + pls.getRotation());
+		
+		Z0Craft.stuhl.addBlocksToWorld(this.world, new BlockPos(x * 16 + 8, 2, z * 16 + 8), pls);
 	}
 	
 	public boolean generateStructures(Chunk chunkIn, int x, int z) {

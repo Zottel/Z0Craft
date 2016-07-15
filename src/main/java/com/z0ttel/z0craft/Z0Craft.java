@@ -27,10 +27,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import com.z0ttel.z0craft.creativetab.Z0CreativeTab;
 
 import com.z0ttel.z0craft.blocks.Z0Blocks;
-import com.z0ttel.z0craft.blocks.ClientZ0Blocks;
+
+import com.z0ttel.z0craft.items.Z0Items;
 
 import com.z0ttel.z0craft.dimension.Z0Dimension;
-import com.z0ttel.z0craft.dimension.ClientZ0Dimension;
 
 @Mod(modid = Z0Craft.MODID, version = Z0Craft.VERSION)
 public class Z0Craft
@@ -46,6 +46,10 @@ public class Z0Craft
 	@SidedProxy(clientSide="com.z0ttel.z0craft.blocks.ClientZ0Blocks",
 	            serverSide="com.z0ttel.z0craft.blocks.Z0Blocks")
 	public static Z0Blocks blocks;
+	
+	@SidedProxy(clientSide="com.z0ttel.z0craft.items.ClientZ0Items",
+	            serverSide="com.z0ttel.z0craft.items.Z0Items")
+	public static Z0Items items;
 	
 	@SidedProxy(clientSide="com.z0ttel.z0craft.dimension.ClientZ0Dimension",
 	            serverSide="com.z0ttel.z0craft.dimension.Z0Dimension")
@@ -68,7 +72,11 @@ public class Z0Craft
 		this.creativeTab = new Z0CreativeTab("z0craft");
 		
 		blocks.preInit(event);
+		items.createForBlocks(blocks.blocks);
+		items.preInit(event);
+		
 		dimension.preInit(event);
+		
 		Z0Craft.logger.info("Z0Craft/preInit done");
 	}
 	
@@ -78,7 +86,7 @@ public class Z0Craft
 		
 		TemplateManager templateMan = new TemplateManager("/");
 		// TODO: replace this with deobfuscated when ready
-		stuhl = templateMan.func_189942_b(null, new ResourceLocation("z0craft:stuhl"));
+		stuhl = templateMan.func_189942_b(null, new ResourceLocation("z0craft:wolleteil"));
 		Z0Craft.logger.info("test1 template: " + stuhl);
 		
 		blocks.init(event);

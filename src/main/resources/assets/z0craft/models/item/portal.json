@@ -1,5 +1,5 @@
 {
-  "parent": "z0craft:block/lelight",
+  "parent": "z0craft:block/portal",
   "display": {
     "thirdperson": {
       "rotation": [ -90, 0, 0 ],

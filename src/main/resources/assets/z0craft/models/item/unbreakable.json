@@ -1,5 +1,5 @@
 {
-  "parent": "z0craft:block/leportal",
+  "parent": "z0craft:block/unbreakable",
   "display": {
     "thirdperson": {
       "rotation": [ -90, 0, 0 ],

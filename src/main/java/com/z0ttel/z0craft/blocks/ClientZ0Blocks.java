@@ -24,36 +24,6 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ClientZ0Blocks extends Z0Blocks {
-	public void preInit(FMLPreInitializationEvent event)
-	{
-		super.preInit(event);
-		
-		for (Item item: blockitems) {
-			ModelResourceLocation mrl = new ModelResourceLocation(item.getRegistryName().toString(), "inventory");
-			
-			ModelLoader.setCustomModelResourceLocation(item, 0, mrl);
-		}
-		
-		/*
-		// Debug stuffs, have a look at finding items
-		IForgeRegistry<Item> itemRegistry = GameRegistry.findRegistry(Item.class);
-		if(itemRegistry == null) {
-			return;
-		}
-		for(Item item: itemRegistry.getValues()) {
-		}
-		*/
-	}
-	
-	public void init(FMLInitializationEvent event)
-	{
-		super.init(event);
-	}
-	
-	public void postInit(FMLPostInitializationEvent event)
-	{
-		super.postInit(event);
-	}
 }
 
 

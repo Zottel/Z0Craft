@@ -8,16 +8,15 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.BiomeProviderSingle;
 import net.minecraft.world.gen.ChunkProviderEnd;
 
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+
 import com.z0ttel.z0craft.Z0Craft;
 
 public class Z0WorldProvider extends WorldProvider{
-	
-	public Z0WorldProvider() {
-		this.hasNoSky = true;
-	}
-	
 	public void createBiomeProvider()
 	{
+		// TODO: CUSTOM BIOME
 		this.biomeProvider = new BiomeProviderSingle(Biomes.SKY);
 	}
 	
@@ -25,6 +24,13 @@ public class Z0WorldProvider extends WorldProvider{
 	{
 		return new Z0ChunkProvider(this.worldObj, this.worldObj.getSeed());
 	}
+	
+	public DimensionType getDimensionType()
+	{
+		// TODO: hope this gets called only after registration >.<
+		return DimensionType.getById(Z0Craft.config.dimensionID);
+	}
+	
 	
 	public boolean canRespawnHere()
 	{
@@ -36,10 +42,15 @@ public class Z0WorldProvider extends WorldProvider{
 		return false;
 	}
 	
-	public DimensionType getDimensionType()
+	public boolean getHasNoSky() {
+		return true;
+	}
+	
+	
+	@SideOnly(Side.CLIENT)
+	public boolean isSkyColored()
 	{
-		// TODO: hope this gets called only after registration >.<
-		return DimensionType.getById(Z0Craft.config.dimensionID);
+		return false;
 	}
 	
 	
