@@ -39,16 +39,20 @@ public class Z0Blocks {
 		.setUnlocalizedName("rock").setRegistryName("rock")
 		.setHardness(3.0F);
 
-	public static Block LIGHT = new Block(Material.GLASS)
-		.setUnlocalizedName("light").setRegistryName("light")
-		.setHardness(3.0F).setLightLevel(1.0F);
-
 	public static Block GLASS = new Block(Material.GLASS)
 		.setUnlocalizedName("glass").setRegistryName("glass")
 		.setHardness(3.0F);
+
+	public static Block LIGHT = new Block(Material.GLASS)
+		.setUnlocalizedName("light").setRegistryName("light")
+		.setHardness(3.0F).setLightLevel(1.0F);
+	
+	public static Block BRICK = new Block(Material.ROCK)
+		.setUnlocalizedName("brick").setRegistryName("brick")
+		.setHardness(3.0F);
 	
 	public static Block blocks[] = new Block[]{
-		PORTAL, UNBREAKABLE, ROCK, LIGHT, GLASS
+		PORTAL, UNBREAKABLE, ROCK, GLASS, LIGHT, BRICK
 	};
 	
 	public void preInit(FMLPreInitializationEvent event) {
