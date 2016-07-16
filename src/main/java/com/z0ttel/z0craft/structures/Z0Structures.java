@@ -59,6 +59,8 @@ public class Z0Structures {
 		int dimensionId = world.provider.getDimension();
 		// TODO: RESET WHEN NEW WORLD IS LOADED
 		
+		world.theProfiler.startSection("Z0Structures");
+		
 		if(!structureSpawners.containsKey(dimensionId)) {
 			if(world.provider.getDimensionType() == DimensionType.OVERWORLD) {
 				StructureSpawner newSpawner =
@@ -73,5 +75,7 @@ public class Z0Structures {
 		} else {
 			structureSpawners.get(dimensionId).fillChunk(world, chunk);
 		}
+		
+		world.theProfiler.endSection();
 	}
 }
