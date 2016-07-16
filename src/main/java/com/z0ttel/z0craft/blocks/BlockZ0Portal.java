@@ -57,7 +57,7 @@ public class BlockZ0Portal extends BlockBreakable {
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
 	{
-		Z0Craft.logger.info("BlockZ0Portal/onEntityCollidedWithBlock called for entity: " + entityIn);
+		//Z0Craft.logger.info("BlockZ0Portal/onEntityCollidedWithBlock called for entity: " + entityIn);
 		if(entityIn.timeUntilPortal > 0) {
 			return;
 		}

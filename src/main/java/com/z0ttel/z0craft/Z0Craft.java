@@ -31,6 +31,7 @@ import com.z0ttel.z0craft.blocks.Z0Blocks;
 import com.z0ttel.z0craft.items.Z0Items;
 
 import com.z0ttel.z0craft.dimension.Z0Dimension;
+import com.z0ttel.z0craft.structures.Z0Structures;
 
 @Mod(modid = Z0Craft.MODID, version = Z0Craft.VERSION)
 public class Z0Craft
@@ -55,6 +56,8 @@ public class Z0Craft
 	            serverSide="com.z0ttel.z0craft.dimension.Z0Dimension")
 	public static Z0Dimension dimension;
 	
+	public static Z0Structures structures = new Z0Structures();
+	
 	public static Logger logger;
 	
 	public static Config config;
@@ -76,6 +79,7 @@ public class Z0Craft
 		items.preInit(event);
 		
 		dimension.preInit(event);
+		structures.preInit(event);
 		
 		Z0Craft.logger.info("Z0Craft/preInit done");
 	}
@@ -90,7 +94,9 @@ public class Z0Craft
 		Z0Craft.logger.info("test1 template: " + stuhl);
 		
 		blocks.init(event);
+		items.init(event);
 		dimension.init(event);
+		structures.init(event);
 		
 		Z0Craft.logger.info("Z0Craft/init done");
 	}
@@ -100,7 +106,9 @@ public class Z0Craft
 		Z0Craft.logger.info("Z0Craft/postInit called");
 		
 		blocks.postInit(event);
+		items.postInit(event);
 		dimension.postInit(event);
+		structures.postInit(event);
 		
 		Z0Craft.logger.info("Z0Craft/postInit done");
 	}

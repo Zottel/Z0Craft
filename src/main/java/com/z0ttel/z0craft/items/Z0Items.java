@@ -71,4 +71,10 @@ public class Z0Items {
 			registerItem(item);
 		}
 	}
+	
+	public void init(FMLInitializationEvent event) {
+	}
+	
+	public void postInit(FMLPostInitializationEvent event) {
+	}
 }
