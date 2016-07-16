@@ -1,5 +1,5 @@
 {
-  "parent": "z0craft:block/lerock",
+  "parent": "z0craft:block/rock",
   "display": {
     "thirdperson": {
       "rotation": [ -90, 0, 0 ],
