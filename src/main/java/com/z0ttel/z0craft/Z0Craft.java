@@ -10,6 +10,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.structure.template.TemplateManager;
 import net.minecraft.world.gen.structure.template.Template;
 
+import net.minecraft.launchwrapper.Launch;
+
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import java.io.File;
@@ -67,8 +69,12 @@ public class Z0Craft
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		logger = event.getModLog();
+		
 		Z0Craft.logger.info("Z0Craft/preInit called");
 		Z0Craft.logger.info("source file: " + event.getSourceFile());
+		if((Boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment")) {
+			Z0Craft.logger.info("Running in DEV ENV");
+		}
 		
 		config = new Config(event.getSuggestedConfigurationFile());
 		
