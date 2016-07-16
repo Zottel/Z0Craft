@@ -29,11 +29,12 @@ import com.z0ttel.z0craft.Z0Craft;
 public class Z0Blocks {
 	public static Block PORTAL = new BlockZ0Portal()
 		.setUnlocalizedName("portal").setRegistryName("portal")
-		.setBlockUnbreakable().setLightLevel(0.45F);
+		.setBlockUnbreakable().setResistance(6000000.0F)
+		.setLightLevel(0.45F);
 
 	public static Block UNBREAKABLE = new Block(Material.ROCK)
 		.setUnlocalizedName("unbreakable").setRegistryName("unbreakable")
-		.setBlockUnbreakable();
+		.setBlockUnbreakable().setResistance(6000000.0F);
 
 	public static Block ROCK = new Block(Material.ROCK)
 		.setUnlocalizedName("rock").setRegistryName("rock")
