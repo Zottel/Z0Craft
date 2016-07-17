@@ -1,5 +1,6 @@
 package com.z0ttel.z0craft.blocks;
 
+import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.material.Material;
@@ -10,6 +11,7 @@ import net.minecraft.block.material.MapColor;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
+
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -63,44 +65,17 @@ public class BlockZ0Portal extends BlockBreakable {
 		if(entityIn.timeUntilPortal > 0) {
 			return;
 		}
-		entityIn.timeUntilPortal = 20; // 1 second
 		
-		if(!(entityIn.worldObj instanceof WorldServer)) {
-			return;
-		}
-		MinecraftServer mcServer = ((WorldServer) entityIn.worldObj).getMinecraftServer();
+		// Set timeout for next port
+		entityIn.timeUntilPortal = 40; // 2 seconds
 		
-		//entity.dimension
-		int sourceDim = worldIn.provider.getDimension();
 		int destinationDim = Z0Craft.config.dimensionID;
 		if(entityIn.dimension == destinationDim) {
 			destinationDim = 0;
 		}
 		
-		WorldServer sourceWorldServer = mcServer.worldServerForDimension(sourceDim);
-		WorldServer destinationWorldServer = mcServer.worldServerForDimension(destinationDim);
-		
-		Z0Teleporter.Direction direction =
-			destinationDim == 0 ? Z0Teleporter.Direction.UP : Z0Teleporter.Direction.DOWN;
-		
-		// Our teleporter remembers the exact position before transfer
-		EntityPos ePos = new EntityPos(entityIn);
-		Teleporter teleporter =
-			new Z0Teleporter(destinationWorldServer,
-			                 direction,
-			                 ePos);
-		
-		if(entityIn instanceof EntityPlayerMP) {
-			EntityPlayerMP player = (EntityPlayerMP)entityIn;
-			
-			mcServer.getPlayerList().transferPlayerToDimension(player, destinationDim, teleporter);
-		} else {
-			//mcServer.getPlayerList().transferEntityToWorld(Entity entityIn, int lastDimension, WorldServer oldWorldIn, WorldServer toWorldIn, net.minecraft.world.Teleporter teleporter)
-			
-			mcServer.getPlayerList().transferEntityToWorld(entityIn, sourceDim, sourceWorldServer, destinationWorldServer, teleporter);
-			
-			// TODO: insert voodoo here
-		}
+		Z0Craft.dimension.transfer.queueToDimension(entityIn, destinationDim);
+		//Z0Teleporter.toDimension(entityIn, destinationDim);
 	}
 
 	@SideOnly(Side.CLIENT)

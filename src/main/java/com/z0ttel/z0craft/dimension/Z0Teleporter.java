@@ -1,6 +1,15 @@
 package com.z0ttel.z0craft.dimension;
 
+import java.lang.reflect.Method;
+
+import java.util.List;
+
+import net.minecraft.crash.CrashReport;
+import net.minecraft.crash.ICrashReportDetail;
+
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
@@ -9,8 +18,17 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraft.entity.Entity;
+
+import net.minecraft.server.MinecraftServer;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+
 
 import com.z0ttel.z0craft.Z0Craft;
 import com.z0ttel.z0craft.util.EntityPos;
@@ -26,7 +44,7 @@ public class Z0Teleporter extends Teleporter {
 	
 	public Z0Teleporter(WorldServer worldIn, Direction directionIn, EntityPos ePosIn) {
 		super(worldIn);
-		Z0Craft.logger.info("Z0Teleporter/Z0Teleporter(worldIn) called");
+		//Z0Craft.logger.info("Z0Teleporter/Z0Teleporter(worldIn) called");
 		
 		worldServer = worldIn;
 		direction = directionIn;
@@ -55,7 +73,7 @@ public class Z0Teleporter extends Teleporter {
 	}
 	
 	public void placeInPortal(Entity entityIn, float rotationYaw) {
-		Z0Craft.logger.info("Z0Teleporter/placeInPortal called for entity: " + entityIn);
+		//Z0Craft.logger.info("Z0Teleporter/placeInPortal called for entity: " + entityIn);
 		
 		// Do at least call the methods we don't need...
 		if(!this.placeInExistingPortal(entityIn, rotationYaw))
@@ -131,16 +149,17 @@ public class Z0Teleporter extends Teleporter {
 	}
 	
 	public boolean makePortal(Entity entityIn) {
-		Z0Craft.logger.info("Z0Teleporter/makePortal called");
+		//Z0Craft.logger.info("Z0Teleporter/makePortal called");
 		return false;
 	}
 	
 	public void removeStalePortalLocations(long worldTime) {
-		Z0Craft.logger.info("Z0Teleporter/removeStalePortalLocations called");
+		//Z0Craft.logger.info("Z0Teleporter/removeStalePortalLocations called");
 	}
 	/*public class PortalPosition extends BlockPos {
 		public PortalPosition() {
 			Z0Craft.logger.info("Z0Teleporter/PortalPosition/PortalPosition called");
 		}
 	}*/
+	
 }

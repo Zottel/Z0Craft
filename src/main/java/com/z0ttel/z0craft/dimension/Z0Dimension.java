@@ -17,10 +17,12 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 
 import com.z0ttel.z0craft.dimension.Z0WorldProvider;
+import com.z0ttel.z0craft.dimension.Z0Teleporter;
 import com.z0ttel.z0craft.Z0Craft;
 
 public class Z0Dimension {
 	public DimensionType dimType;
+	public Z0DimensionTransfer transfer = new Z0DimensionTransfer();
 	
 	public void preInit(FMLPreInitializationEvent event) {
 		Z0Craft.logger.info("Z0Dimension/preInit called");
@@ -35,6 +37,9 @@ public class Z0Dimension {
 		// Required for PopulateChunkEvent
 		// (which I use for spawning structures in the overworld)
 		MinecraftForge.EVENT_BUS.register(this);
+		
+		// Required for tick-phased teleport.
+		MinecraftForge.EVENT_BUS.register(transfer);
 	}
 	
 	public void postInit(FMLPostInitializationEvent event) {

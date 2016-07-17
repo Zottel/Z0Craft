@@ -31,10 +31,13 @@ import com.z0ttel.z0craft.Z0Craft;
 
 public class Z0Items {
 	public static Item SWORD = new ItemSword(Item.ToolMaterial.DIAMOND)
-	.setUnlocalizedName("sword").setRegistryName("sword");
+		.setUnlocalizedName("sword").setRegistryName("sword");
+	
+	public static Item KEY = new Item()
+		.setUnlocalizedName("key").setRegistryName("key");
 	
 	public Item items[] = new Item[]{
-		SWORD
+		SWORD, KEY
 	};
 	
 	public Item blockitems[];
