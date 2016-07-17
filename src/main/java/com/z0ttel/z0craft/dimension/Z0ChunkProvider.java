@@ -20,20 +20,32 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.Rotation;
 
 import com.z0ttel.z0craft.Z0Craft;
+import com.z0ttel.z0craft.structures.Z0Structures;
 import com.z0ttel.z0craft.blocks.Z0Blocks;
 
 
 public class Z0ChunkProvider implements IChunkGenerator {
 	private World world;
 	private long seed;
+	private ChunkPrimer chunkPrimer;
 	
 	public Z0ChunkProvider(World worldIn, long seed) {
 		Z0Craft.logger.info("Z0ChunkProvider/Z0ChunkProvider called");
 		this.world = worldIn;
 		this.seed = seed;
+		
+		chunkPrimer = new ChunkPrimer();
+		
+		this.primeLayer(chunkPrimer, 0, Blocks.BEDROCK);
+		for(int i = 1; i < 255; i++) {
+			this.primeLayer(chunkPrimer, i, Z0Craft.blocks.ROCK);
+		}
+		this.primeLayer(chunkPrimer, 255, Blocks.BEDROCK);
+		
 	}
 	
 	private void primeLayer(ChunkPrimer primer, int layer, Block block) {
@@ -49,15 +61,7 @@ public class Z0ChunkProvider implements IChunkGenerator {
 	
 	public Chunk provideChunk(int x, int z) {
 		Z0Craft.logger.info("Z0ChunkProvider/provideChunk called for " + x + "/" + z);
-		ChunkPrimer chunkprimer = new ChunkPrimer();
-		
-		Block block = Z0Craft.blocks.LIGHT;
-		
-		this.primeLayer(chunkprimer, 0, Blocks.BEDROCK);
-		this.primeLayer(chunkprimer, 1, block);
-		this.primeLayer(chunkprimer, 255, Blocks.BEDROCK);
-		
-		Chunk chunk = new Chunk(this.world, chunkprimer, x, z);
+		Chunk chunk = new Chunk(this.world, chunkPrimer, x, z);
 		Biome[] abiome = this.world.getBiomeProvider().getBiomes((Biome[])null, x * 16, z * 16, 16, 16);
 		byte[] abyte = chunk.getBiomeArray();
 		
@@ -71,29 +75,7 @@ public class Z0ChunkProvider implements IChunkGenerator {
 	}
 	
 	public void populate(int x, int z) {
-		Z0Craft.logger.info("Z0ChunkProvider/populate called for " + x + "/" + z);
-		// TODO: add structures here?
-		
-		PlacementSettings pls = new PlacementSettings();
-		pls.setIgnoreEntities(false);
-		switch(Math.abs(x) % 4) {
-			case 0:
-				pls.setRotation(Rotation.NONE);
-				break;
-			case 1:
-				pls.setRotation(Rotation.CLOCKWISE_90);
-				break;
-			case 2:
-				pls.setRotation(Rotation.CLOCKWISE_180);
-				break;
-			case 3:
-				pls.setRotation(Rotation.COUNTERCLOCKWISE_90);
-				break;
-		}
-		
-		Z0Craft.logger.info("Z0ChunkProvider/placing stuhl with rotation " + pls.getRotation());
-		
-		Z0Craft.stuhl.addBlocksToWorld(this.world, new BlockPos(x * 16 + 8, 2, z * 16 + 8), pls);
+		Z0Craft.structures.fillChunk(world, seed, new ChunkPos(x, z));
 	}
 	
 	public boolean generateStructures(Chunk chunkIn, int x, int z) {

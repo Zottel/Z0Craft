@@ -25,6 +25,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import com.z0ttel.z0craft.Z0Craft;
 import com.z0ttel.z0craft.dimension.Z0Teleporter;
+import com.z0ttel.z0craft.util.EntityPos;
 
 public class BlockZ0Portal extends BlockBreakable {
 
@@ -57,10 +58,12 @@ public class BlockZ0Portal extends BlockBreakable {
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
 	{
-		//Z0Craft.logger.info("BlockZ0Portal/onEntityCollidedWithBlock called for entity: " + entityIn);
+		Z0Craft.logger.info("BlockZ0Portal/onEntityCollidedWithBlock called for entity: " + entityIn);
 		if(entityIn.timeUntilPortal > 0) {
 			return;
 		}
+		
+		entityIn.timeUntilPortal = 20; // 1 second
 		
 		//entity.dimension
 		int destinationDim = Z0Craft.config.dimensionID;
@@ -70,12 +73,22 @@ public class BlockZ0Portal extends BlockBreakable {
 		
 		if(entityIn instanceof EntityPlayerMP) {
 			EntityPlayerMP player = (EntityPlayerMP)entityIn;
-			player.timeUntilPortal = 5; // 5 Ticks, 1/4th of a second
+			// remember the exact position
+			EntityPos ePos = new EntityPos(player);
 			
 			MinecraftServer mcServer = player.mcServer;
 			
-			Teleporter teleporter = new Z0Teleporter(mcServer.worldServerForDimension(destinationDim));
+			Z0Teleporter.Direction direction =
+				destinationDim == 0 ? Z0Teleporter.Direction.UP : Z0Teleporter.Direction.DOWN;
+			
+			Teleporter teleporter =
+				new Z0Teleporter(mcServer.worldServerForDimension(destinationDim),
+				                 direction,
+				                 ePos);
+			
 			mcServer.getPlayerList().transferPlayerToDimension(player, destinationDim, teleporter);
+			
+			//player.connection.setPlayerLocation(ePos.x, player.posY, ePos.z, entityIn.rotationYaw, entityIn.rotationPitch);
 		} else {
 			// TODO: insert voodoo here
 		}

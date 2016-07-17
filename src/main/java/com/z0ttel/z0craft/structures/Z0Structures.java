@@ -68,7 +68,10 @@ public class Z0Structures {
 				structureSpawners.put(dimensionId, newSpawner);
 				newSpawner.fillChunk(world, chunk);
 			} else if(world.provider.getDimensionType() == Z0Craft.dimension.dimType) {
-				
+				StructureSpawner newSpawner =
+					new StructureSpawnerOverworld(world, structCache);
+				structureSpawners.put(dimensionId, newSpawner);
+				newSpawner.fillChunk(world, chunk);
 			} else {
 				// TODO throw Exception
 			}
