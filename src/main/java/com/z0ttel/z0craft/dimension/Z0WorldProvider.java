@@ -7,6 +7,7 @@ import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.biome.BiomeProviderSingle;
 import net.minecraft.world.gen.ChunkProviderEnd;
+import net.minecraft.world.gen.ChunkProviderServer;
 
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.fml.relauncher.Side;

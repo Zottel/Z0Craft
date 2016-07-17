@@ -34,7 +34,7 @@ public class Z0ChunkProvider implements IChunkGenerator {
 	private ChunkPrimer chunkPrimer;
 	
 	public Z0ChunkProvider(World worldIn, long seed) {
-		Z0Craft.logger.info("Z0ChunkProvider/Z0ChunkProvider called");
+		//Z0Craft.logger.info("Z0ChunkProvider/Z0ChunkProvider called");
 		this.world = worldIn;
 		this.seed = seed;
 		
@@ -75,11 +75,15 @@ public class Z0ChunkProvider implements IChunkGenerator {
 	}
 	
 	public void populate(int x, int z) {
+		//Z0Craft.logger.info("Z0ChunkProvider/populate called for " + x + "/" + z);
+		// Only called when surrounding (4) chunks have been loaded.
 		Z0Craft.structures.fillChunk(world, seed, new ChunkPos(x, z));
 	}
 	
 	public boolean generateStructures(Chunk chunkIn, int x, int z) {
-		Z0Craft.logger.info("Z0ChunkProvider/generateStructures called for " + x + "/" + z);
+		//Z0Craft.logger.info("Z0ChunkProvider/generateStructures called for " + x + "/" + z);
+		
+		// Return value is used for marking the chunk as modified.
 		return false;
 	}
 	

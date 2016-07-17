@@ -5,8 +5,12 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 
 import com.z0ttel.z0craft.Z0Craft;
 import com.z0ttel.z0craft.util.EntityPos;
@@ -65,9 +69,32 @@ public class Z0Teleporter extends Teleporter {
 	}
 	
 	public boolean placeInExistingPortal(Entity entityIn, float rotationYaw) {
-		Z0Craft.logger.info("Z0Teleporter/placeInExistingPortal called");
 		BlockPos.MutableBlockPos iterator =
 			new BlockPos.MutableBlockPos(ePos.block());
+		//Z0Craft.logger.info("Z0Teleporter/placeInExistingPortal called at " + ePos);
+		
+		ChunkProviderServer providerServer = worldServer.getChunkProvider();
+		IChunkGenerator generator = providerServer.chunkGenerator;
+		
+		// Make sure the blocks surrounding the current one are generated
+		// and loaded (it won't be populated otherwise)
+		ChunkPos chunkPos = new ChunkPos(iterator);
+		for (int x = chunkPos.chunkXPos - 1; x <= chunkPos.chunkXPos + 1; x++)
+			for (int z = chunkPos.chunkZPos - 1; z <= chunkPos.chunkZPos + 1; z++)
+				providerServer.provideChunk(x, z);
+		
+		// make sure the portal is spawned in:
+		Chunk chunk = worldServer.getChunkFromBlockCoords(iterator);
+		chunk.populateChunk(providerServer, generator);
+		
+		if (!chunk.isTerrainPopulated()) {
+			Z0Craft.logger.info("Z0Teleporter: EVERYTHING IS ASPLODE! " + chunk);
+			Z0Craft.logger.info("" + providerServer + ", " + generator);
+			
+			if (!chunk.isTerrainPopulated()) {
+				Z0Craft.logger.info("Z0Teleporter: EVERYTHING IS EVEN MORE ASPLODE!");
+			}
+		}
 		
 		// Derp correction:
 		//iterator.setPos(iterator.getX() - 1, iterator.getY(), iterator.getZ() - 1);

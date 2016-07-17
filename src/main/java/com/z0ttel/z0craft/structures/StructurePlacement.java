@@ -37,7 +37,7 @@ class StructurePlacement {
 	// Expects the world again because we might encounter different worlds for
 	// the same seed/dimension in single player.
 	public void fillChunk(World world, ChunkPos chunk) {
-		Z0Craft.logger.info("filling chunk with structure: " + chunk + " at " + origin);
+		//Z0Craft.logger.info("filling chunk with structure: " + chunk + " at " + origin);
 		// Only draw parts of the structure that are in the current chunk.
 		placement.setBoundingBox(null);
 		placement.setChunk(chunk);

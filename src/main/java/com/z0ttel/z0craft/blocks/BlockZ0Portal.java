@@ -15,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.Teleporter;
 
 import net.minecraft.util.BlockRenderLayer;
@@ -58,38 +59,46 @@ public class BlockZ0Portal extends BlockBreakable {
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
 	{
-		Z0Craft.logger.info("BlockZ0Portal/onEntityCollidedWithBlock called for entity: " + entityIn);
+		//Z0Craft.logger.info("BlockZ0Portal/onEntityCollidedWithBlock called for entity: " + entityIn);
 		if(entityIn.timeUntilPortal > 0) {
 			return;
 		}
-		
 		entityIn.timeUntilPortal = 20; // 1 second
 		
+		if(!(entityIn.worldObj instanceof WorldServer)) {
+			return;
+		}
+		MinecraftServer mcServer = ((WorldServer) entityIn.worldObj).getMinecraftServer();
+		
 		//entity.dimension
+		int sourceDim = worldIn.provider.getDimension();
 		int destinationDim = Z0Craft.config.dimensionID;
 		if(entityIn.dimension == destinationDim) {
 			destinationDim = 0;
 		}
 		
+		WorldServer sourceWorldServer = mcServer.worldServerForDimension(sourceDim);
+		WorldServer destinationWorldServer = mcServer.worldServerForDimension(destinationDim);
+		
+		Z0Teleporter.Direction direction =
+			destinationDim == 0 ? Z0Teleporter.Direction.UP : Z0Teleporter.Direction.DOWN;
+		
+		// Our teleporter remembers the exact position before transfer
+		EntityPos ePos = new EntityPos(entityIn);
+		Teleporter teleporter =
+			new Z0Teleporter(destinationWorldServer,
+			                 direction,
+			                 ePos);
+		
 		if(entityIn instanceof EntityPlayerMP) {
 			EntityPlayerMP player = (EntityPlayerMP)entityIn;
-			// remember the exact position
-			EntityPos ePos = new EntityPos(player);
-			
-			MinecraftServer mcServer = player.mcServer;
-			
-			Z0Teleporter.Direction direction =
-				destinationDim == 0 ? Z0Teleporter.Direction.UP : Z0Teleporter.Direction.DOWN;
-			
-			Teleporter teleporter =
-				new Z0Teleporter(mcServer.worldServerForDimension(destinationDim),
-				                 direction,
-				                 ePos);
 			
 			mcServer.getPlayerList().transferPlayerToDimension(player, destinationDim, teleporter);
-			
-			//player.connection.setPlayerLocation(ePos.x, player.posY, ePos.z, entityIn.rotationYaw, entityIn.rotationPitch);
 		} else {
+			//mcServer.getPlayerList().transferEntityToWorld(Entity entityIn, int lastDimension, WorldServer oldWorldIn, WorldServer toWorldIn, net.minecraft.world.Teleporter teleporter)
+			
+			mcServer.getPlayerList().transferEntityToWorld(entityIn, sourceDim, sourceWorldServer, destinationWorldServer, teleporter);
+			
 			// TODO: insert voodoo here
 		}
 	}
