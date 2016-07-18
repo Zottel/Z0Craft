@@ -10,6 +10,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockStairs;
 import net.minecraft.block.material.Material;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -52,8 +53,13 @@ public class Z0Blocks {
 		.setUnlocalizedName("brick").setRegistryName("brick")
 		.setHardness(3.0F);
 	
+	//(new BlockStairs(block.getDefaultState())).setUnlocalizedName("stairsStone"));
+	public static Block STAIRS = new Z0Stairs(BRICK.getDefaultState())
+		.setUnlocalizedName("stairs").setRegistryName("stairs")
+		.setHardness(3.0F);
+	
 	public static Block blocks[] = new Block[]{
-		PORTAL, UNBREAKABLE, ROCK, GLASS, LIGHT, BRICK
+		PORTAL, UNBREAKABLE, ROCK, GLASS, LIGHT, BRICK, STAIRS
 	};
 	
 	public void preInit(FMLPreInitializationEvent event) {
