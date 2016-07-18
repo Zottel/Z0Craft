@@ -131,8 +131,8 @@ public class Z0DimensionTransfer {
 		}
 		
 		// TODO: maybe update only specific entity?
-		sourceWorldServer.updateEntities();
-		destinationWorldServer.updateEntities();
+		//sourceWorldServer.updateEntities();
+		//destinationWorldServer.updateEntities();
 		
 		//destinationWorldServer.updateEntities();
 		

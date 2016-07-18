@@ -63,11 +63,12 @@ public class BlockZ0Portal extends BlockBreakable {
 	{
 		//Z0Craft.logger.info("BlockZ0Portal/onEntityCollidedWithBlock called for entity: " + entityIn);
 		if(entityIn.timeUntilPortal > 0) {
+			entityIn.timeUntilPortal = 40; // 2 seconds
 			return;
+		} else {
+			// Set timeout for next port
+			entityIn.timeUntilPortal = 40; // 2 seconds
 		}
-		
-		// Set timeout for next port
-		entityIn.timeUntilPortal = 40; // 2 seconds
 		
 		int destinationDim = Z0Craft.config.dimensionID;
 		if(entityIn.dimension == destinationDim) {
