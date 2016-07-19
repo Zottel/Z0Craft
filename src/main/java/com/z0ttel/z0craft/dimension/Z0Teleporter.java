@@ -129,7 +129,9 @@ public class Z0Teleporter extends Teleporter {
 			
 			// Maybe try Block.isAir too?
 			// (may help with mod air)
-			if(worldServer.isAirBlock(iterator)) {
+			boolean isAir = worldServer.getBlockState(iterator).getBlock() == Z0Craft.blocks.PORTAL;
+			isAir = isAir || worldServer.isAirBlock(iterator);
+			if(isAir) {
 				freeBlocks++;
 				if(freeBlocks == 3) {
 					placeAtHeight(entityIn,

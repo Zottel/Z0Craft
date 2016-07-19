@@ -1,0 +1,8 @@
+{
+    "parent": "block/stairs",
+    "textures": {
+        "bottom": "z0craft:unbreakable",
+        "top": "z0craft:unbreakable",
+        "side": "z0craft:unbreakable"
+    }
+}

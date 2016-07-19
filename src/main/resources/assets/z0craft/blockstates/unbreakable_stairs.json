@@ -1,10 +1,11 @@
 {
 	"forge_marker": 1,
+	
 	"defaults": {
 		"textures": {
-			"bottom": "z0craft:brick",
-			"top": "z0craft:brick",
-			"side": "z0craft:brick"
+			"bottom": "z0craft:unbreakable",
+			"top": "z0craft:unbreakable",
+			"side": "z0craft:unbreakable"
 		}
 	},
 	

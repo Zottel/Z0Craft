@@ -128,11 +128,12 @@ public class Z0DimensionTransfer {
 			
 			
 			passenger.startRiding(entityIn, true);
+			passenger.updateRidden();
 		}
 		
 		// TODO: maybe update only specific entity?
-		//sourceWorldServer.updateEntities();
-		//destinationWorldServer.updateEntities();
+		sourceWorldServer.updateEntities();
+		destinationWorldServer.updateEntities();
 		
 		//destinationWorldServer.updateEntities();
 		

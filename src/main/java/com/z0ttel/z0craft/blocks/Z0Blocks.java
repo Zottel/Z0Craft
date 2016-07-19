@@ -36,6 +36,9 @@ public class Z0Blocks {
 	public static Block UNBREAKABLE = new Block(Material.ROCK)
 		.setUnlocalizedName("unbreakable").setRegistryName("unbreakable")
 		.setBlockUnbreakable().setResistance(6000000.0F);
+	
+	public static Block UNBREAKABLE_STAIRS = new Z0Stairs(UNBREAKABLE.getDefaultState())
+		.setUnlocalizedName("unbreakable_stairs").setRegistryName("unbreakable_stairs");
 
 	public static Block ROCK = new Block(Material.ROCK)
 		.setUnlocalizedName("rock").setRegistryName("rock")
@@ -57,9 +60,9 @@ public class Z0Blocks {
 	public static Block STAIRS = new Z0Stairs(BRICK.getDefaultState())
 		.setUnlocalizedName("stairs").setRegistryName("stairs")
 		.setHardness(3.0F);
-	
+
 	public static Block blocks[] = new Block[]{
-		PORTAL, UNBREAKABLE, ROCK, GLASS, LIGHT, BRICK, STAIRS
+		PORTAL, UNBREAKABLE, UNBREAKABLE_STAIRS, ROCK, GLASS, LIGHT, BRICK, STAIRS
 	};
 	
 	public void preInit(FMLPreInitializationEvent event) {
