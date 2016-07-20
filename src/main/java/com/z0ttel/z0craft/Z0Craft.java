@@ -64,8 +64,6 @@ public class Z0Craft
 	
 	public static Config config;
 	
-	public static Template stuhl;
-	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		logger = event.getModLog();
@@ -93,11 +91,6 @@ public class Z0Craft
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		Z0Craft.logger.info("Z0Craft/init called");
-		
-		TemplateManager templateMan = new TemplateManager("/");
-		// TODO: replace this with deobfuscated when ready
-		stuhl = templateMan.func_189942_b(null, new ResourceLocation("z0craft:wolleteil"));
-		Z0Craft.logger.info("test1 template: " + stuhl);
 		
 		blocks.init(event);
 		items.init(event);
