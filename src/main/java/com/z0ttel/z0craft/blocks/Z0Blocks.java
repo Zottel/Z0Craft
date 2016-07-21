@@ -60,9 +60,13 @@ public class Z0Blocks {
 	public static Block STAIRS = new Z0Stairs(BRICK.getDefaultState())
 		.setUnlocalizedName("stairs").setRegistryName("stairs")
 		.setHardness(3.0F);
+	
+	public static Block DUST = new BlockDust()
+		.setUnlocalizedName("dust").setRegistryName("dust")
+		.setHardness(5.0F); // really hard to get rid of XD
 
 	public static Block blocks[] = new Block[]{
-		PORTAL, UNBREAKABLE, UNBREAKABLE_STAIRS, ROCK, GLASS, LIGHT, BRICK, STAIRS
+		PORTAL, UNBREAKABLE, UNBREAKABLE_STAIRS, ROCK, GLASS, LIGHT, BRICK, STAIRS, DUST
 	};
 	
 	public void preInit(FMLPreInitializationEvent event) {

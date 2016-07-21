@@ -1,0 +1,18 @@
+{
+	"forge_marker": 1,
+	
+	"defaults": {
+		"textures": {
+			"particle": "z0craft:blocks/dust",
+			"texture": "z0craft:blocks/dust"
+		}
+	},
+	"variants": {
+		"normal": [
+			{"model": "z0craft:dust"},
+			{"model": "z0craft:dust", "y": 90},
+			{"model": "z0craft:dust", "y": 180},
+			{"model": "z0craft:dust", "y": 270}
+		]
+	}
+}
