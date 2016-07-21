@@ -11,6 +11,8 @@ import net.minecraft.block.BlockColored;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.EnumDyeColor;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -19,6 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -37,6 +40,7 @@ public class BlockDust extends BlockBreakable {
 		super(Material.GLASS, false);
 	}
 	
+	@SuppressWarnings("deprecation")
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
 	{
 		return DUST_AABB;
@@ -63,6 +67,7 @@ public class BlockDust extends BlockBreakable {
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	public boolean isFullCube(IBlockState state)
 	{
 		return false;
@@ -80,12 +85,23 @@ public class BlockDust extends BlockBreakable {
 	{
 		for (int k = 0; k < 16; ++k)
 		{
-			IBlockState blockstate = Blocks.WOOL.getStateFromMeta(0);
-			Z0Craft.logger.info("state id" + Block.getStateId(blockstate));
+			IBlockState blockstate = Blocks.WOOL.getBlockState().getBaseState().withProperty(BlockColored.COLOR, EnumDyeColor.WHITE);
+			//Z0Craft.logger.info("state id" + Block.getStateId(blockstate));
 			worldIn.spawnParticle(EnumParticleTypes.BLOCK_DUST, pos.getX() + (double)this.RANDOM.nextFloat(), pos.getY() + 0.15D, pos.getZ() + (double)this.RANDOM.nextFloat(), ((double)this.RANDOM.nextFloat() - 0.5D) * 0.08D, ((double)this.RANDOM.nextFloat() - 0.5D) * 0.08D, ((double)this.RANDOM.nextFloat() - 0.5D) * 0.08D, new int[]{Block.getStateId(blockstate)});
 		}
+		
 		if(!worldIn.isRemote){
 			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
+			
+			
+			for(EnumFacing facing: EnumFacing.HORIZONTALS) {
+				if(Math.random() < 0.2) {
+					BlockPos nPos = pos.offset(facing, 1);
+					if(worldIn.isAirBlock(nPos) && canPlaceBlockAt(worldIn, nPos)) {
+						worldIn.setBlockState(nPos, this.getDefaultState());
+					}
+				}
+			}
 		}
 	}
 
