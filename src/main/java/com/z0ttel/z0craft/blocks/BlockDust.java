@@ -11,7 +11,11 @@ import net.minecraft.block.BlockBreakable;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+
 import net.minecraft.item.EnumDyeColor;
 
 import net.minecraft.entity.Entity;
@@ -33,13 +37,26 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockDust extends BlockBreakable {
-
+	public static PropertyBool BREAKING = PropertyBool.create("breaking");
+	
 	protected static final AxisAlignedBB DUST_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.06125D, 1.0D);
 	
 	public BlockDust() {
 		// "false" is ignoreSimilarity, which sets the side rendering
 		// to the right mode for transparent blocks
 		super(Material.GLASS, false);
+		
+		this.setDefaultState(this.blockState.getBaseState().withProperty(BREAKING, false));
+	}
+	
+	public BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, BREAKING);
+	}
+	
+	public int getMetaFromState(IBlockState state) { return 0; }
+	
+	public IBlockState getStateFromMeta() {
+		return this.blockState.getBaseState().withProperty(BREAKING, false);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -79,13 +96,13 @@ public class BlockDust extends BlockBreakable {
 		IBlockState blockstate = Blocks.WOOL.getBlockState().getBaseState().withProperty(BlockColored.COLOR, EnumDyeColor.WHITE);
 		int particleParam[] = new int[]{Block.getStateId(blockstate)};
 		
-		for (int k = 0; k < 48; ++k)
+		for (int k = 0; k < 24; ++k)
 		{
 			//Z0Craft.logger.info("state id" + Block.getStateId(blockstate));
 			worldIn.spawnParticle(EnumParticleTypes.BLOCK_DUST,
-				pos.getX() + (this.RANDOM.nextGaussian() + 0.5),
+				pos.getX() + (this.RANDOM.nextGaussian() * 0.8 + 0.5),
 				pos.getY() + (Math.random() * 0.3 + 0.1),
-				pos.getZ() + (this.RANDOM.nextGaussian() + 0.5),
+				pos.getZ() + (this.RANDOM.nextGaussian() * 0.8 + 0.5),
 				((double)this.RANDOM.nextFloat() - 0.5D) * 0.08D,
 				((double)this.RANDOM.nextFloat() - 0.5D) * 0.08D,
 				((double)this.RANDOM.nextFloat() - 0.5D) * 0.08D,
@@ -158,13 +175,17 @@ public class BlockDust extends BlockBreakable {
 					worldIn.setBlockState(pos.down(), this.getDefaultState());
 				}
 			}
+		} else if (worldIn.getBlockState(pos) == this.getDefaultState().withProperty(BREAKING, true)) {
+			doBreak(worldIn, pos);
 		}
 	}
 	
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
 	{
-		doBreak(worldIn, pos);
+		worldIn.setBlockState(pos, this.getDefaultState().withProperty(BREAKING, true));
+		worldIn.scheduleUpdate(pos, this, 1);
+		//doBreak(worldIn, pos);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -172,7 +193,4 @@ public class BlockDust extends BlockBreakable {
 	{
 		return BlockRenderLayer.TRANSLUCENT;
 	}
-
-
-
 }

@@ -8,6 +8,18 @@
 		}
 	},
 	"variants": {
+		"breaking=true": [
+			{"model": "z0craft:dust"},
+			{"model": "z0craft:dust", "y": 90},
+			{"model": "z0craft:dust", "y": 180},
+			{"model": "z0craft:dust", "y": 270}
+		],
+		"breaking=false": [
+			{"model": "z0craft:dust"},
+			{"model": "z0craft:dust", "y": 90},
+			{"model": "z0craft:dust", "y": 180},
+			{"model": "z0craft:dust", "y": 270}
+		],
 		"normal": [
 			{"model": "z0craft:dust"},
 			{"model": "z0craft:dust", "y": 90},
