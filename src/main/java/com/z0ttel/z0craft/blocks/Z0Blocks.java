@@ -44,6 +44,11 @@ public class Z0Blocks {
 		.setUnlocalizedName("rock").setRegistryName("rock")
 		.setHardness(3.0F);
 
+	public static Block ROCKLIGHT = new Block(Material.ROCK)
+		.setUnlocalizedName("rocklight").setRegistryName("rocklight")
+		.setHardness(3.0F)
+		.setLightLevel(0.6F);
+
 	public static Block GLASS = new BlockZ0Alpha(Material.GLASS)
 		.setUnlocalizedName("glass").setRegistryName("glass")
 		.setHardness(3.0F);
@@ -66,7 +71,7 @@ public class Z0Blocks {
 		.setHardness(5.0F); // really hard to get rid of XD
 
 	public static Block blocks[] = new Block[]{
-		PORTAL, UNBREAKABLE, UNBREAKABLE_STAIRS, ROCK, GLASS, LIGHT, BRICK, STAIRS, DUST
+		PORTAL, UNBREAKABLE, UNBREAKABLE_STAIRS, ROCK, ROCKLIGHT, GLASS, LIGHT, BRICK, STAIRS, DUST
 	};
 	
 	public void preInit(FMLPreInitializationEvent event) {
@@ -76,6 +81,7 @@ public class Z0Blocks {
 			//Z0Craft.logger.info("registering block '" + block.getUnlocalizedName() + "' with registry name '" + block.getRegistryName() + "'");
 			GameRegistry.register(block);
 		}
+		Z0Craft.logger.info("" + LIGHT.getUnlocalizedName());
 	}
 	
 	public void init(FMLInitializationEvent event) {
