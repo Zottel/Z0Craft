@@ -25,6 +25,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
@@ -73,15 +74,8 @@ public class BlockDust extends BlockBreakable {
 	{
 		return false;
 	}
-
-	public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
-	{
-		IBlockState iblockstate = worldIn.getBlockState(pos.down());
-		Block block = iblockstate.getBlock();
-		return block != Blocks.ICE && block != Blocks.PACKED_ICE ? (iblockstate.getBlock().isLeaves(iblockstate, worldIn, pos.down()) ? true : iblockstate.isOpaqueCube() && iblockstate.getMaterial().blocksMovement()) : false;
-	}
 	
-	public void doBreak(World worldIn, BlockPos pos) {
+	public void dustParticles(World worldIn, BlockPos pos) {
 		IBlockState blockstate = Blocks.WOOL.getBlockState().getBaseState().withProperty(BlockColored.COLOR, EnumDyeColor.WHITE);
 		int particleParam[] = new int[]{Block.getStateId(blockstate)};
 		
@@ -97,10 +91,42 @@ public class BlockDust extends BlockBreakable {
 				((double)this.RANDOM.nextFloat() - 0.5D) * 0.08D,
 				particleParam);
 		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, net.minecraft.client.particle.ParticleManager manager)
+	{
+		return false;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean addDestroyEffects(World worldIn, BlockPos pos, net.minecraft.client.particle.ParticleManager manager) {
+		
+		if(worldIn.getBlockState(pos) == this.getDefaultState()) {
+			dustParticles(worldIn, pos);
+		} else if(worldIn.getBlockState(pos.down()) == this.getDefaultState()) {
+			dustParticles(worldIn, pos.down());
+		}
+		// Prevent vanilla destroy effects.
+		return false;
+	}
+	
+	public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
+	{
+		IBlockState iblockstate = worldIn.getBlockState(pos.down());
+		Block block = iblockstate.getBlock();
+		return block != Blocks.ICE && block != Blocks.PACKED_ICE ? (iblockstate.getBlock().isLeaves(iblockstate, worldIn, pos.down()) ? true : iblockstate.isOpaqueCube() && iblockstate.getMaterial().blocksMovement()) : false;
+	}
+	
+	
+	public void doBreak(World worldIn, BlockPos pos) {
+	Z0Craft.logger.info("doBreak for world class " + worldIn.getClass().getCanonicalName());
 		
 		if(!worldIn.isRemote){
-			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
-			
+			worldIn.destroyBlock(pos, false);
+			//worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
 			
 			for(EnumFacing facing: EnumFacing.HORIZONTALS) {
 				if(Math.random() < 0.2) {
@@ -110,13 +136,16 @@ public class BlockDust extends BlockBreakable {
 					}
 				}
 			}
-		}	
+		} else {
+			dustParticles(worldIn, pos);
+		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn)
 	{
-		worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
+		worldIn.scheduleUpdate(pos, this, 1);
 	}
 	
 	@Override

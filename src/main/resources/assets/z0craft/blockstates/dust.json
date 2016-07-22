@@ -3,7 +3,7 @@
 	
 	"defaults": {
 		"textures": {
-			"particle": "z0craft:blocks/dust",
+			"particle": "z0craft:transparent",
 			"texture": "z0craft:blocks/dust"
 		}
 	},
