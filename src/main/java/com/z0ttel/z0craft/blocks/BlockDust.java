@@ -1,5 +1,6 @@
 package com.z0ttel.z0craft.blocks;
 
+import java.util.Random;
 import javax.annotation.Nullable;
 
 import com.z0ttel.z0craft.Z0Craft;
@@ -79,10 +80,8 @@ public class BlockDust extends BlockBreakable {
 		Block block = iblockstate.getBlock();
 		return block != Blocks.ICE && block != Blocks.PACKED_ICE ? (iblockstate.getBlock().isLeaves(iblockstate, worldIn, pos.down()) ? true : iblockstate.isOpaqueCube() && iblockstate.getMaterial().blocksMovement()) : false;
 	}
-
-	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
-	{
+	
+	public void doBreak(World worldIn, BlockPos pos) {
 		IBlockState blockstate = Blocks.WOOL.getBlockState().getBaseState().withProperty(BlockColored.COLOR, EnumDyeColor.WHITE);
 		int particleParam[] = new int[]{Block.getStateId(blockstate)};
 		
@@ -111,7 +110,32 @@ public class BlockDust extends BlockBreakable {
 					}
 				}
 			}
+		}	
+	}
+	
+	@Override
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn)
+	{
+		worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
+	}
+	
+	@Override
+	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+		if(!canPlaceBlockAt(worldIn, pos)) {
+			doBreak(worldIn, pos);
+			
+			if(canPlaceBlockAt(worldIn, pos.down())) {
+				if(Math.random() < 0.6) {
+					worldIn.setBlockState(pos.down(), this.getDefaultState());
+				}
+			}
 		}
+	}
+	
+	@Override
+	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
+	{
+		doBreak(worldIn, pos);
 	}
 
 	@SideOnly(Side.CLIENT)
