@@ -83,11 +83,20 @@ public class BlockDust extends BlockBreakable {
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
 	{
-		for (int k = 0; k < 16; ++k)
+		IBlockState blockstate = Blocks.WOOL.getBlockState().getBaseState().withProperty(BlockColored.COLOR, EnumDyeColor.WHITE);
+		int particleParam[] = new int[]{Block.getStateId(blockstate)};
+		
+		for (int k = 0; k < 48; ++k)
 		{
-			IBlockState blockstate = Blocks.WOOL.getBlockState().getBaseState().withProperty(BlockColored.COLOR, EnumDyeColor.WHITE);
 			//Z0Craft.logger.info("state id" + Block.getStateId(blockstate));
-			worldIn.spawnParticle(EnumParticleTypes.BLOCK_DUST, pos.getX() + (double)this.RANDOM.nextFloat(), pos.getY() + 0.15D, pos.getZ() + (double)this.RANDOM.nextFloat(), ((double)this.RANDOM.nextFloat() - 0.5D) * 0.08D, ((double)this.RANDOM.nextFloat() - 0.5D) * 0.08D, ((double)this.RANDOM.nextFloat() - 0.5D) * 0.08D, new int[]{Block.getStateId(blockstate)});
+			worldIn.spawnParticle(EnumParticleTypes.BLOCK_DUST,
+				pos.getX() + (this.RANDOM.nextGaussian() + 0.5),
+				pos.getY() + (Math.random() * 0.3 + 0.1),
+				pos.getZ() + (this.RANDOM.nextGaussian() + 0.5),
+				((double)this.RANDOM.nextFloat() - 0.5D) * 0.08D,
+				((double)this.RANDOM.nextFloat() - 0.5D) * 0.08D,
+				((double)this.RANDOM.nextFloat() - 0.5D) * 0.08D,
+				particleParam);
 		}
 		
 		if(!worldIn.isRemote){
