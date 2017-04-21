@@ -15,15 +15,16 @@ import net.minecraftforge.fml.relauncher.Side;
 import com.z0ttel.z0craft.Z0Craft;
 
 public class Z0WorldProvider extends WorldProvider{
-	public void createBiomeProvider()
+	
+	public void init()
 	{
-		// TODO: CUSTOM BIOME
-		this.biomeProvider = new BiomeProviderSingle(Biomes.SKY);
+			this.biomeProvider = new BiomeProviderSingle(Biomes.SKY);
+			this.hasNoSky = true;
 	}
 	
 	public IChunkGenerator createChunkGenerator()
 	{
-		return new Z0ChunkProvider(this.worldObj, this.worldObj.getSeed());
+		return new Z0ChunkProvider(this.world, this.world.getSeed());
 	}
 	
 	public DimensionType getDimensionType()
@@ -47,13 +48,11 @@ public class Z0WorldProvider extends WorldProvider{
 		return true;
 	}
 	
-	
 	@SideOnly(Side.CLIENT)
 	public boolean isSkyColored()
 	{
 		return false;
 	}
-	
 	
 	
 }

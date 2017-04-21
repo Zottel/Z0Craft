@@ -25,15 +25,15 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 
 import com.z0ttel.z0craft.Z0Craft;
+import com.z0ttel.z0craft.util.Z0Random.WorldChunk;
 import com.z0ttel.z0craft.util.CacheMap;
 
 public class Z0Structures {
-	public static TemplateManager templateManager = new TemplateManager("/");
+	public static TemplateManager templateManager = new TemplateManager("/", null);
 	public static Map<String, Template> templates = new HashMap<String, Template>();
 	public static Template getTemplate(String name) {
 		if(!templates.containsKey(name)) {
-			//templates.put(name, templateMan.func_189942_b(null, new ResourceLocation("z0craft:wolleteil"));
-			templates.put(name, templateManager.func_189942_b(null, new ResourceLocation(name)));
+			templates.put(name, templateManager.getTemplate(null, new ResourceLocation(name)));
 		}
 		
 		return templates.get(name);
@@ -42,8 +42,8 @@ public class Z0Structures {
 	public static Map<Integer, StructureSpawner> structureSpawners =
 		new HashMap<Integer, StructureSpawner>();
 	
-	private Map<Map.Entry<Integer, ChunkPos>, List<StructurePlacement>> structCache =
-		new CacheMap<Map.Entry<Integer, ChunkPos>, List<StructurePlacement>>(256);
+	private Map<WorldChunk, List<StructureInstance>> structCache =
+		new CacheMap<WorldChunk, List<StructureInstance>>(256);
 	
 	public void preInit(FMLPreInitializationEvent event) {
 		// TODO: load templates here

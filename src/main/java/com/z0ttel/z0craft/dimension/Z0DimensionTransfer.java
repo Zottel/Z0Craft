@@ -13,8 +13,10 @@ import net.minecraft.crash.ICrashReportDetail;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-
 import net.minecraft.entity.player.EntityPlayerMP;
+
+import net.minecraft.launchwrapper.Launch;
+
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.World;
@@ -34,6 +36,8 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
+
 
 import com.z0ttel.z0craft.Z0Craft;
 import com.z0ttel.z0craft.util.EntityPos;
@@ -44,40 +48,40 @@ public class Z0DimensionTransfer {
 	private static Map<Entity, Integer> toTransfer = new HashMap<Entity, Integer>();
 	private Set<Entity> done = new HashSet<Entity>();
 	
-	public void queueToDimension(Entity entityIn, int destinationDim) {
-		//Z0Craft.logger.info("Queued entity for transport across dimension: " + entityIn);
-		
-		if(entityIn.worldObj.isRemote) {
+	public synchronized void queueToDimension(Entity entityIn, int destinationDim) {
+		if(entityIn.world.isRemote) {
 			return;
 		}
 		
 		if(!toTransfer.containsKey(entityIn)) {
 			toTransfer.put(entityIn, destinationDim);
 		}
+		
+		Z0Craft.logger.info("Queued entity for transport across dimension: " + entityIn);
 	}
 	
-	public void toDimension(Entity entityIn, int destinationDim) {
+	protected void toDimension(Entity entityIn, int destinationDim) {
 		toDimensionEntity(entityIn, destinationDim);
 	}
-	public Entity toDimensionEntity(Entity entityIn, int destinationDim) {
+	protected Entity toDimensionEntity(Entity entityIn, int destinationDim) {
 		// if riding: recurse to lowest entity in riding chain and return.
 		if(entityIn.isRiding()) {
 			toDimension(entityIn.getLowestRidingEntity(), destinationDim);
 			return null;
 		}
 		
-		//Z0Craft.logger.info("Transporting entity across dimension: " + entityIn);
+		Z0Craft.logger.info("Transporting entity across dimension: " + entityIn);
 		
 		// Add entityIn to entities marked as done this tick
 		done.add(entityIn);
 		
-		if(entityIn.worldObj.isRemote) {
+		if(entityIn.world.isRemote) {
 			return null;
 		}
-		MinecraftServer mcServer = ((WorldServer) entityIn.worldObj).getMinecraftServer();
+		MinecraftServer mcServer = ((WorldServer) entityIn.world).getMinecraftServer();
 		
 		//entity.dimension
-		int sourceDim = entityIn.worldObj.provider.getDimension();
+		int sourceDim = entityIn.world.provider.getDimension();
 		
 		WorldServer sourceWorldServer = mcServer.worldServerForDimension(sourceDim);
 		WorldServer destinationWorldServer = mcServer.worldServerForDimension(destinationDim);
@@ -104,7 +108,7 @@ public class Z0DimensionTransfer {
 		entityIn.removePassengers();
 		
 		// Remove from world, this entity will not be seen here again.
-		//entityIn.worldObj.removeEntity(entityIn);
+		//entityIn.world.removeEntity(entityIn);
 		
 		if(entityIn instanceof EntityPlayerMP) {
 			EntityPlayerMP player = (EntityPlayerMP)entityIn;
@@ -146,17 +150,20 @@ public class Z0DimensionTransfer {
 		return entityIn;
 	}
 	
-	public Entity transferEntity(Entity entityIn, WorldServer worldServerSrc, WorldServer worldServerDest, Teleporter teleporter) {
-		//entityIn.worldObj.removeEntity(entityIn);
+	protected Entity transferEntity(Entity entityIn, WorldServer worldServerSrc, WorldServer worldServerDest, Teleporter teleporter) {
+		//entityIn.world.removeEntity(entityIn);
 		entityIn.isDead = false;
 		
-		Entity entity = EntityList.createEntityByName(EntityList.getEntityString(entityIn), worldServerDest);
+		Entity entity = EntityList.newEntity(entityIn.getClass(), worldServerDest);
 		
 		if (entity != null)
 		{
 			// entity.copyDataFromOld(this);
 			try {
-				Method copyMethod = Entity.class.getDeclaredMethod("copyDataFromOld", new Class[] {Entity.class});
+				// Obfuscated env requires other method name
+				String mName = ((Boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment")) ? "copyDataFromOld" : "func_180432_n";
+				
+				Method copyMethod = Entity.class.getDeclaredMethod(mName, new Class[] {Entity.class});
 				copyMethod.setAccessible(true);
 				copyMethod.invoke(entity, entityIn);
 			} catch(Exception e) {
@@ -169,7 +176,7 @@ public class Z0DimensionTransfer {
 			
 			boolean flag = entity.forceSpawn;
 			entity.forceSpawn = true;
-			worldServerDest.spawnEntityInWorld(entity);
+			worldServerDest.spawnEntity(entity);
 			entity.forceSpawn = flag;
 			worldServerDest.updateEntityWithOptionalForce(entity, true);
 		}
@@ -179,9 +186,10 @@ public class Z0DimensionTransfer {
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOW)
-	public void onServerTickEvent(TickEvent.ServerTickEvent tickEvent) {
+	public synchronized void onServerTickEvent(TickEvent.ServerTickEvent tickEvent) {
+		//this.theProfiler.startSection("pollingChunks");
 		if(tickEvent.phase == TickEvent.Phase.END) {
-			// TODO: transfer entities to dimension
+			//Z0Craft.logger.info("dimension transfer tick start");
 			for(Entity entity: toTransfer.keySet()) {
 				if(!done.contains(entity)) {
 					toDimension(entity, toTransfer.get(entity));
@@ -192,6 +200,9 @@ public class Z0DimensionTransfer {
 				toTransfer.clear();
 				done.clear();
 			}
+			//Z0Craft.logger.info("dimension transfer tick end");
 		}
+		
+		//this.theProfiler.endSection("pollingChunks");
 	}
 }

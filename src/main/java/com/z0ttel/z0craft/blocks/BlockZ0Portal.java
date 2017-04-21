@@ -44,11 +44,13 @@ public class BlockZ0Portal extends BlockBreakable {
 
 	// Bounding box for Portal blocks
 	// possible alternative: larger bounding box so we collide before a player enters the block?
-	//protected static final AxisAlignedBB END_PORTAL_AABB = new AxisAlignedBB(0.2D, 0.0D, 0.2D, 0.8D, 1.0D, 0.8D);
-	/*public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+	protected static final AxisAlignedBB Z0_PORTAL_AABB = new AxisAlignedBB(0.2D, 0.2D, 0.2D, 0.8D, 0.8D, 0.8D);
+	@SuppressWarnings( "deprecation" )
+	@Nullable
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
 	{
-		return END_PORTAL_AABB;
-	}*/
+		return Z0_PORTAL_AABB;
+	}
 	
 	// TODO: get rid of deprecated stuffs
 	@SuppressWarnings( "deprecation" )
@@ -65,15 +67,15 @@ public class BlockZ0Portal extends BlockBreakable {
 		// to the right mode for transparent blocks
 		super(Material.PORTAL, false, MapColor.EMERALD);
 	}
-
-	
 	
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
 	{
+		//Z0Craft.logger.info("Z0Portal/onEntityCollidedWithBlock called");
 		if(entityIn instanceof EntityPlayerMP) {
 			EntityPlayerMP player = (EntityPlayerMP) entityIn;
 			// ((EntityPlayerMP)list.get(i)).getCachedUniqueIdString().getBytes()
+			/*
 			try {
 				MessageDigest sha1 = MessageDigest.getInstance("SHA1");
 				sha1.reset();
@@ -86,16 +88,16 @@ public class BlockZ0Portal extends BlockBreakable {
 			} catch (NoSuchAlgorithmException e) {
 				CrashReport crashreport1 = CrashReport.makeCrashReport(e, "Unable to copy entity data via private method!");
 				throw new ReportedException(crashreport1);
-			}
+			}*/
 		}
 		
 		//Z0Craft.logger.info("BlockZ0Portal/onEntityCollidedWithBlock called for entity: " + entityIn);
 		if(entityIn.timeUntilPortal > 0) {
-			entityIn.timeUntilPortal = 40; // 2 seconds
+			entityIn.timeUntilPortal = 20; // 2 seconds
 			return;
 		} else {
 			// Set timeout for next port
-			entityIn.timeUntilPortal = 40; // 2 seconds
+			entityIn.timeUntilPortal = 20; // 2 seconds
 		}
 		
 		int destinationDim = Z0Craft.config.dimensionID;

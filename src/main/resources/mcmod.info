@@ -1,7 +1,7 @@
 [
 {
   "modid": "z0craft",
-  "name": "z0craft",
+  "name": "Z0Craft",
   "description": "le mod",
   "version": "${version}",
   "mcversion": "${mcversion}",

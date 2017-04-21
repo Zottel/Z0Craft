@@ -2,48 +2,69 @@ package com.z0ttel.z0craft.structures;
 
 import java.util.List;
 import java.util.LinkedList;
+import java.util.Map;
 
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.BlockPos;
 
-import net.minecraft.util.Rotation;
-
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.template.PlacementSettings;
-import net.minecraft.world.gen.structure.template.Template;
-import net.minecraft.world.gen.structure.StructureBoundingBox;
 
-import com.z0ttel.z0craft.Z0Craft;
 import com.z0ttel.z0craft.util.Z0Random;
+import com.z0ttel.z0craft.util.Z0Random.WorldChunk;
+
 
 class StructurePlacement {
-	private World world;
-	private BlockPos origin;
-	private PlacementSettings placement;
+	public final int upperLimit, lowerLimit;
+	protected int inX = 1, inZ = 1;
+	protected long seed;
 	
-	private Template template;
+	protected Structure structure;
 	
-	public StructurePlacement(World worldIn, BlockPos originIn, Z0Random rand, Template templateIn) {
-		template = templateIn;
-		world = worldIn;
-		origin = originIn;
-		template = templateIn;
-		// Choose a random rotation.
-		Rotation rot = Rotation.values()[rand.nextInt(Rotation.values().length)];
-		placement = new PlacementSettings();
-		placement.setRotation(rot);
+	public StructurePlacement(int num) {
+		upperLimit = (lowerLimit = num);
 	}
 	
-	// Expects the world again because we might encounter different worlds for
-	// the same seed/dimension in single player.
-	public void fillChunk(World world, ChunkPos chunk) {
-		//Z0Craft.logger.info("filling chunk with structure: " + chunk + " at " + origin);
-		// Only draw parts of the structure that are in the current chunk.
-		placement.setBoundingBox(null);
-		placement.setChunk(chunk);
-		// getter regenerates bounds for current chunk
-		StructureBoundingBox bounds = placement.getBoundingBox();
+	public StructurePlacement(int upper, int lower) {
+		upperLimit = upper; lowerLimit = lower;
+	}
+	
+	// Number of Chunks in which this will be placed!
+	public StructurePlacement in(int x, int z) {
+		inX = x; inZ = z;
+		return this;
+	}
+	
+	public StructurePlacement seededWith(long seedIn) {
+		seed = seedIn;
+		return this;
+	}
+	
+	public StructurePlacement of(Structure structureIn) {
+		this.structure = structureIn;
+		return this;
+	}
+	
+	public List<StructureInstance> structuresForChunk(World world, ChunkPos chunk) {
+		ChunkPos superChunk = new ChunkPos(chunk.chunkXPos / inX, chunk.chunkZPos / inZ);
 		
-		template.addBlocksToWorld(this.world, origin, placement);
+		Z0Random rand = new Z0Random(world, superChunk);
+		rand.feed(seed);
+		
+		int num = lowerLimit + rand.nextInt(upperLimit - lowerLimit);
+		
+		LinkedList<StructureInstance> structs = new LinkedList<StructureInstance>();
+		
+		for(int i = 0; i < num; i++) {
+			int xChunk = rand.nextInt(inX), zChunk = rand.nextInt(inZ);
+			int xOff = rand.nextInt(16), zOff = rand.nextInt(16);
+			long sSeed = rand.nextLong();
+			if(superChunk.chunkXPos + xChunk == chunk.chunkXPos &&
+			   superChunk.chunkZPos + zChunk == chunk.chunkZPos) {
+				structs.add(structure.place(sSeed, chunk.chunkXPos * 16 + xOff,
+				                                   chunk.chunkZPos * 16 + zOff));
+			}
+		}
+		
+		return structs;
 	}
 }

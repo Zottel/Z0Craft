@@ -26,47 +26,36 @@ import net.minecraft.util.Rotation;
 import com.z0ttel.z0craft.Z0Craft;
 import com.z0ttel.z0craft.structures.Z0Structures;
 import com.z0ttel.z0craft.blocks.Z0Blocks;
+import com.z0ttel.z0craft.util.PerlinNoise;
+import com.z0ttel.z0craft.gen.features.Roads;
+import com.z0ttel.z0craft.gen.base.Limits;
+import com.z0ttel.z0craft.gen.PrimerGen;
 
 
 public class Z0ChunkProvider implements IChunkGenerator {
 	private World world;
 	private long seed;
-	private ChunkPrimer chunkPrimer;
+	private PrimerGen primerGen;
 	
-	public Z0ChunkProvider(World worldIn, long seed) {
-		//Z0Craft.logger.info("Z0ChunkProvider/Z0ChunkProvider called");
-		this.world = worldIn;
-		this.seed = seed;
+	public Z0ChunkProvider(World worldIn, long seedIn) {
+		world = worldIn; seed = seedIn;
 		
-		chunkPrimer = new ChunkPrimer();
-		
-		this.primeLayer(chunkPrimer, 0, Blocks.BEDROCK);
-		for(int i = 1; i < 255; i++) {
-			this.primeLayer(chunkPrimer, i, Z0Craft.blocks.ROCK);
-		}
-		this.primeLayer(chunkPrimer, 255, Blocks.BEDROCK);
-		
-	}
-	
-	private void primeLayer(ChunkPrimer primer, int layer, Block block) {
-		
-		for (int j = 0; j < 16; ++j)
-		{
-			for (int k = 0; k < 16; ++k)
-			{
-				primer.setBlockState(j, layer, k, block.getDefaultState());
-			}
-		}
+		this.primerGen = new PrimerGen(worldIn, seedIn,
+			new Roads(world, seed),
+			new Limits(world, seed));
 	}
 	
 	public Chunk provideChunk(int x, int z) {
 		Z0Craft.logger.info("Z0ChunkProvider/provideChunk called for " + x + "/" + z);
-		Chunk chunk = new Chunk(this.world, chunkPrimer, x, z);
+		
+		// Get (mostly) filled ChunkPrimer from PrimerGen
+		ChunkPrimer primer = primerGen.provideChunk(x, z);
+		
+		// Necessary misc stuff:
+		Chunk chunk = new Chunk(this.world, primer, x, z);
 		Biome[] abiome = this.world.getBiomeProvider().getBiomes((Biome[])null, x * 16, z * 16, 16, 16);
 		byte[] abyte = chunk.getBiomeArray();
-		
-		for (int l = 0; l < abyte.length; ++l)
-		{
+		for (int l = 0; l < abyte.length; ++l) {
 			abyte[l] = (byte)Biome.getIdForBiome(abiome[l]);
 		}
 		
@@ -75,9 +64,9 @@ public class Z0ChunkProvider implements IChunkGenerator {
 	}
 	
 	public void populate(int x, int z) {
-		//Z0Craft.logger.info("Z0ChunkProvider/populate called for " + x + "/" + z);
+		Z0Craft.logger.info("Z0ChunkProvider/populate called for " + x + "/" + z);
 		// Only called when surrounding (4) chunks have been loaded.
-		Z0Craft.structures.fillChunk(world, seed, new ChunkPos(x, z));
+		//Z0Craft.structures.fillChunk(world, seed, new ChunkPos(x, z));
 	}
 	
 	public boolean generateStructures(Chunk chunkIn, int x, int z) {
@@ -94,9 +83,11 @@ public class Z0ChunkProvider implements IChunkGenerator {
 	}
 	
 	@Nullable
-	public BlockPos getStrongholdGen(World worldIn, String structureName, BlockPos position) {
+	public BlockPos getStrongholdGen(World worldIn, String structureName, BlockPos position, boolean p_180513_4_) {
 		return null;
 	}
 	
-	public void recreateStructures(Chunk chunkIn, int x, int z){}
+	public void recreateStructures(Chunk chunkIn, int x, int z) {
+		Z0Craft.logger.info("Z0ChunkProvider/recreateStructures called for " + x + "/" + z);
+	}
 }

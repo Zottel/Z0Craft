@@ -18,7 +18,8 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 
-version = "${minecraft_version}-${mod_version}." + (System.env.BUILD_NUMBER ?: "homebaked")
+//version = "${minecraft_version}-${mod_version}." + (System.env.BUILD_NUMBER ?: "homebaked")
+version = "${minecraft_version}-${mod_version}"
 group= "com.z0ttel.z0craft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "z0craft"
 

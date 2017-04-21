@@ -26,6 +26,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import com.z0ttel.z0craft.items.Z0Map;
 import com.z0ttel.z0craft.blocks.Z0Blocks;
 import com.z0ttel.z0craft.Z0Craft;
 
@@ -36,8 +37,11 @@ public class Z0Items {
 	public static Item KEY = new Item()
 		.setUnlocalizedName("key").setRegistryName("key");
 	
+	public static Item MAP = new Z0Map()
+		.setUnlocalizedName("map_closed").setRegistryName("map_closed").setMaxStackSize(1);
+	
 	public Item items[] = new Item[]{
-		SWORD, KEY
+		SWORD, KEY, MAP
 	};
 	
 	public Item blockitems[];

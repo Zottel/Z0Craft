@@ -1,12 +1,14 @@
 package com.z0ttel.z0craft.creativetab;
 
 import java.util.List;
+import net.minecraft.util.NonNullList;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.creativetab.CreativeTabs;
 
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 
 import com.z0ttel.z0craft.Z0Craft;
 import com.z0ttel.z0craft.blocks.Z0Blocks;
@@ -21,7 +23,7 @@ public class Z0CreativeTab extends CreativeTabs {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public void displayAllRelevantItems(List<ItemStack> list) {
+	public void displayAllRelevantItems(NonNullList<ItemStack> list) {
 		for(Item item: Z0Craft.items.items) {
 			item.getSubItems(item, this, list);
 		}
@@ -33,9 +35,9 @@ public class Z0CreativeTab extends CreativeTabs {
 	
 	
 	@SideOnly(Side.CLIENT)
-	public Item getTabIconItem()
+	public ItemStack getTabIconItem()
 	{
-		return Items.WRITTEN_BOOK;
+		return new ItemStack(Items.WRITTEN_BOOK);
 	}
 	public boolean hasSearchBar() {
 		return true;

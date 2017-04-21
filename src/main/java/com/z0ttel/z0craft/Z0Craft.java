@@ -1,5 +1,6 @@
 package com.z0ttel.z0craft;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Level;
 
@@ -7,6 +8,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.client.resources.I18n;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.WorldType;
 import net.minecraft.world.gen.structure.template.TemplateManager;
 import net.minecraft.world.gen.structure.template.Template;
 
@@ -35,14 +37,15 @@ import com.z0ttel.z0craft.items.Z0Items;
 import com.z0ttel.z0craft.dimension.Z0Dimension;
 import com.z0ttel.z0craft.structures.Z0Structures;
 
-@Mod(modid = Z0Craft.MODID, version = Z0Craft.VERSION)
+@Mod(modid = Z0Craft.MODID, name = Z0Craft.NAME, version = Z0Craft.VERSION)
 public class Z0Craft
 {
 	public static final String MODID = "z0craft";
-	public static final String VERSION = "0.1";
+	public static final String NAME = "Z0Craft";
+	public static final String VERSION = "1.10.2-0.1";
 	
-	@Mod.Instance(Z0Craft.MODID)
-	public static Z0Craft instance;
+	//@Mod.Instance(Z0Craft.MODID)
+	//public static Z0Craft instance;
 	
 	public static Z0CreativeTab	creativeTab;
 	

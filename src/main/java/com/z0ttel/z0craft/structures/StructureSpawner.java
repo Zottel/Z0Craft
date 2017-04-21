@@ -12,6 +12,8 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.util.math.ChunkPos;
 
 import com.z0ttel.z0craft.Z0Craft;
+import com.z0ttel.z0craft.util.Z0Random.WorldChunk;
+
 
 public abstract class StructureSpawner {
 	// Assuming structures will spread no more than one chunk in each direction.
@@ -19,20 +21,20 @@ public abstract class StructureSpawner {
 	
 	int dimensionId;
 	long seed;
-	Map<Map.Entry<Integer, ChunkPos>, List<StructurePlacement>> structCache;
+	Map<WorldChunk, List<StructureInstance>> structCache;
 	
-	public StructureSpawner(World worldIn, Map<Map.Entry<Integer, ChunkPos>, List<StructurePlacement>> structCacheIn) {
+	public StructureSpawner(World worldIn, Map<WorldChunk, List<StructureInstance>> structCacheIn) {
 		dimensionId = worldIn.provider.getDimension();
 		seed = worldIn.getSeed();
 		structCache = structCacheIn;
 	}
 	
-	public abstract List<StructurePlacement> structuresForChunk(World world, ChunkPos pos);
+	public abstract List<StructureInstance> structuresForChunk(World world, ChunkPos pos);
 	
-	public List<StructurePlacement> structuresForChunkCached(World worldIn, ChunkPos pos) {
-		Map.Entry<Integer, ChunkPos> key = new SimpleImmutableEntry<Integer, ChunkPos>(dimensionId, pos);
+	public List<StructureInstance> structuresForChunkCached(World worldIn, ChunkPos pos) {
+		WorldChunk key = new WorldChunk(worldIn, pos);
 		if(!structCache.containsKey(key)) {
-			List<StructurePlacement> tmp = structuresForChunk(worldIn, pos);
+			List<StructureInstance> tmp = structuresForChunk(worldIn, pos);
 			structCache.put(key, tmp);
 			return tmp;
 		} else {
@@ -41,7 +43,7 @@ public abstract class StructureSpawner {
 	}
 	
 	public void fillChunk(World worldIn, ChunkPos chunk) {
-		LinkedList<StructurePlacement> toDraw = new LinkedList<StructurePlacement>();
+		LinkedList<StructureInstance> toDraw = new LinkedList<StructureInstance>();
 		// Aggregate structures from surrounding chunks.
 		
 		for(int x = chunk.chunkXPos - RADIUS; x <= chunk.chunkXPos + RADIUS; x++) {
@@ -51,7 +53,7 @@ public abstract class StructureSpawner {
 			}
 		}
 		
-		for(StructurePlacement struct: toDraw) {
+		for(StructureInstance struct: toDraw) {
 			struct.fillChunk(worldIn, chunk);
 		}
 	}

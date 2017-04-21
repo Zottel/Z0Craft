@@ -7,6 +7,7 @@ import com.z0ttel.z0craft.Z0Craft;
 import com.z0ttel.z0craft.dimension.Z0Teleporter;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.BlockBreakable;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.material.MapColor;
@@ -18,12 +19,15 @@ import net.minecraft.block.state.IBlockState;
 
 import net.minecraft.item.EnumDyeColor;
 
+
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.EnumFacing;
@@ -45,6 +49,8 @@ public class BlockDust extends BlockBreakable {
 		// "false" is ignoreSimilarity, which sets the side rendering
 		// to the right mode for transparent blocks
 		super(Material.GLASS, false);
+		
+		this.blockSoundType = new SoundType(0.1F, 0.1F, SoundEvents.BLOCK_SNOW_STEP, SoundEvents.BLOCK_SNOW_STEP, SoundEvents.BLOCK_SNOW_STEP, SoundEvents.BLOCK_SNOW_STEP, SoundEvents.BLOCK_SNOW_STEP);
 		
 		this.setDefaultState(this.blockState.getBaseState().withProperty(BREAKING, false));
 	}
@@ -146,21 +152,20 @@ public class BlockDust extends BlockBreakable {
 			//worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
 			
 			for(EnumFacing facing: EnumFacing.HORIZONTALS) {
-				if(Math.random() < 0.2) {
+				if(Math.random() < 0.4) {
 					BlockPos nPos = pos.offset(facing, 1);
 					if(worldIn.isAirBlock(nPos) && canPlaceBlockAt(worldIn, nPos)) {
 						worldIn.setBlockState(nPos, this.getDefaultState());
 					}
 				}
 			}
-		} else {
-			dustParticles(worldIn, pos);
 		}
+		dustParticles(worldIn, pos);
 	}
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn)
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
 	{
 		worldIn.scheduleUpdate(pos, this, 1);
 	}
@@ -184,8 +189,9 @@ public class BlockDust extends BlockBreakable {
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
 	{
 		worldIn.setBlockState(pos, this.getDefaultState().withProperty(BREAKING, true));
-		worldIn.scheduleUpdate(pos, this, 1);
+		worldIn.scheduleUpdate(new BlockPos(pos), this, 1);
 		//doBreak(worldIn, pos);
+		dustParticles(worldIn, pos);
 	}
 
 	@SideOnly(Side.CLIENT)

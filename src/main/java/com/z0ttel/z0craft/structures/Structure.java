@@ -15,6 +15,9 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 
 import com.z0ttel.z0craft.Z0Craft;
 import com.z0ttel.z0craft.util.Z0Random;
+import com.z0ttel.z0craft.util.Z0Random.WorldChunk;
+
+//new StructurePlacement(2, 4).in(4,4).of(new Structure("z0craft:wolleteil")).seededWith(1);
 
 class Structure {
 	private String name = "z0craft:wolleteil";
@@ -29,10 +32,10 @@ class Structure {
 	
 	// Z0Random is deterministic, so every structure generated for this chunk
 	// should always be exactly the same. (While code stays the same)
-	public List<StructurePlacement> forChunk(World worldIn, ChunkPos chunk) {
-		LinkedList<StructurePlacement> structs = new LinkedList<StructurePlacement>();
+	public List<StructureInstance> forChunk(World worldIn, ChunkPos chunk) {
+		LinkedList<StructureInstance> structs = new LinkedList<StructureInstance>();
 		ChunkPos superChunk = new ChunkPos(chunk.chunkXPos / 4, chunk.chunkZPos / 4);
-		Z0Random rand = new Z0Random(0, worldIn.getSeed(), superChunk);
+		Z0Random rand = new Z0Random(worldIn.getSeed(), superChunk);
 		if(rand.nextInt(4) == (Math.abs(chunk.chunkXPos) % 4) &&
 		   rand.nextInt(4) == (Math.abs(chunk.chunkZPos) % 4)) {
 			int dimensionId = worldIn.provider.getDimension();
@@ -43,7 +46,7 @@ class Structure {
 			BlockPos pos = chunk.getBlock(rand.nextInt(16),
 			                              layer,
 			                              rand.nextInt(16));
-			structs.add(new StructurePlacement(worldIn, pos, rand, template));
+			structs.add(new StructureInstance(worldIn, pos, rand, template));
 		}
 		
 		/*
@@ -56,9 +59,15 @@ class Structure {
 			BlockPos pos = chunk.getBlock(rand.nextInt(16),
 			                              0,
 			                              rand.nextInt(16));
-			structs.add(new StructurePlacement(worldIn, pos, rand, template));
+			structs.add(new StructureInstance(worldIn, pos, rand, template));
 		}*/
 		
 		return structs;
+	}
+	
+	// Per-placement seed!
+	public StructureInstance place(long seed, int x, int y) {
+		return null;
+		// TODO: to z or not to z
 	}
 }

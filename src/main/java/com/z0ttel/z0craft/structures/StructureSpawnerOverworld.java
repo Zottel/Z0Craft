@@ -7,14 +7,19 @@ import net.minecraft.util.math.ChunkPos;
 
 import net.minecraft.world.World;
 
+import com.z0ttel.z0craft.util.Z0Random.WorldChunk;
+
+
 public class StructureSpawnerOverworld extends StructureSpawner {
 	public static Structure wolleteil = new Structure("z0craft:wolleteil");
 	
-	public StructureSpawnerOverworld(World worldIn, Map<Map.Entry<Integer, ChunkPos>, List<StructurePlacement>> cache) {
+	
+	
+	public StructureSpawnerOverworld(World worldIn, Map<WorldChunk, List<StructureInstance>> cache) {
 		super(worldIn, cache);
 	}
 	
-	public List<StructurePlacement> structuresForChunk(World world, ChunkPos chunk) {
+	public List<StructureInstance> structuresForChunk(World world, ChunkPos chunk) {
 		return wolleteil.forChunk(world, chunk);
 	}
 }
