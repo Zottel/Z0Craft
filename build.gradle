@@ -3,25 +3,22 @@
 buildscript {
 	repositories {
 		jcenter()
-		
-		maven {
-			name = "forge"
-			
-			url = "http://files.minecraftforge.net/maven"
-		}
+		maven { url = "http://files.minecraftforge.net/maven" }
 	}
 	
 	dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+		classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+		//classpath 'net.minecraftforge.gradle:ForgeGradle:' + project.forgegradle_version
 	}
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 
+
 //version = "${minecraft_version}-${mod_version}." + (System.env.BUILD_NUMBER ?: "homebaked")
 version = "${minecraft_version}-${mod_version}"
-group= "com.z0ttel.z0craft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "z0craft"
+group= "net.z0ttel.z0craft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "Z0Craft"
 
 
 // java version
@@ -36,7 +33,7 @@ minecraft {
 	
 	//mappings = "@MAPPINGS@"
 	mappings = mcp_mappings
-	makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+	//makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
 dependencies {
@@ -95,5 +92,5 @@ processResources
 }
 
 compileJava {
-	options.deprecation = true
+	//options.deprecation = true
 }
